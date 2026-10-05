@@ -110,6 +110,15 @@
   .sectionTitle{display:flex;align-items:center;gap:9px;margin-top:14px;padding-top:11px;border-top:1px solid rgba(217,178,63,.16);color:#d9b23f;font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase}
   .sectionTitle svg{width:16px;height:16px;flex:none;padding:2px;border:1px solid rgba(217,178,63,.22);border-radius:4px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
   [hidden]{display:none!important}
+  .gh{margin:14px 0 0;border-top:1px solid rgba(217,178,63,.16);padding-top:11px}
+  .gh summary{display:flex;align-items:center;gap:9px;cursor:pointer;list-style:none;color:#d9b23f;font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase}
+  .gh summary::-webkit-details-marker{display:none}
+  .gh summary svg{width:16px;height:16px;flex:none;padding:2px;border:1px solid rgba(217,178,63,.22);border-radius:4px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .gh .ghState{margin-left:auto;color:#8d9199;font-size:9px;letter-spacing:.04em;text-transform:none;font-weight:600}
+  .gh[data-on="true"] .ghState{color:#79c98a}
+  .checkRow{display:flex;align-items:center;gap:9px;margin:12px 0 4px;cursor:pointer}
+  .checkRow input{width:16px;height:16px;flex:none;padding:0;accent-color:#d9b23f}
+  .checkRow span{font-size:11px;font-weight:700;color:#d7d9dd}
   svg[data-icon]{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
   button:disabled{opacity:.48;cursor:not-allowed;filter:none}
   button.accent{border-color:rgba(217,178,63,.55);background:#1f1b11;color:#f4d77b}
@@ -310,6 +319,30 @@
         <input id="charY" type="range" min="-25" max="90" value="0" />
       </div>
     </div>
+
+    <details id="gh" class="gh" data-on="false">
+      <summary><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m-5 5 5-5 5 5M4 16v4h16v-4"/></svg>Publication GitHub<span id="ghState" class="ghState">désactivée</span></summary>
+      <label class="checkRow"><input id="ghAuto" type="checkbox" /><span>Envoyer sur GitHub à chaque export</span></label>
+      <div class="field">
+        <label for="ghRepo">Dépôt (propriétaire/nom)</label>
+        <input id="ghRepo" placeholder="mon-compte/mon-site" autocomplete="off" spellcheck="false" />
+      </div>
+      <div class="row">
+        <div class="field">
+          <label for="ghBranch">Branche</label>
+          <input id="ghBranch" placeholder="main" autocomplete="off" spellcheck="false" />
+        </div>
+        <div class="field">
+          <label for="ghFolder">Dossier (racine)</label>
+          <input id="ghFolder" placeholder="cartes" autocomplete="off" spellcheck="false" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="ghToken">Token GitHub</label>
+        <input id="ghToken" type="password" placeholder="github_pat_…" autocomplete="off" spellcheck="false" />
+        <div class="hint">Token « fine-grained » limité à ce dépôt, permission <em>Contents : Read and write</em>. Il reste stocké uniquement dans ce navigateur, jamais dans le fichier.</div>
+      </div>
+    </details>
 
     <div class="panelActions">
       <div class="buttons">
@@ -975,11 +1008,120 @@ function draw(){
   ctx.restore();
 }
 
-function downloadPNG(){
+async function downloadPNG(){
+  const filename=`${(state.name||'gold-card').replace(/[^a-z0-9_-]+/gi,'-')}.png`;
   const a=document.createElement('a');
-  a.download=`${(state.name||'gold-card').replace(/[^a-z0-9_-]+/gi,'-')}.png`;
+  a.download=filename;
   a.href=canvas.toDataURL('image/png');
   a.click();
+  const config=ghConfig();
+  if(config.auto && ghReady(config)){
+    const button=$('downloadBtn');
+    button.disabled=true;
+    try{
+      const blob=await canvasToBlob(canvas,'image/png');
+      const path=await pushToGitHub(config,`${slugify(state.name)}.png`,blob);
+      toast(`Envoyé sur GitHub : ${path}`);
+    }catch(error){
+      toast(`Envoi GitHub impossible : ${error.message}`,'error');
+    }finally{
+      button.disabled=false;
+    }
+  }else if(config.auto){
+    toast('Publication GitHub incomplète : renseigne dépôt et token','error');
+  }
+}
+
+/* ---------- Publication GitHub (API Contents) ---------- */
+const GH_KEY='op-card-github';
+const GH_TOKEN_KEY='op-card-github-token';
+
+function ghConfig(){
+  return {
+    repo:$('ghRepo').value.trim().replace(/^https?:\/\/github\.com\//i,'').replace(/\.git$/,'').replace(/\/+$/,''),
+    branch:$('ghBranch').value.trim(),
+    folder:$('ghFolder').value.trim().replace(/^\/+|\/+$/g,''),
+    token:$('ghToken').value.trim(),
+    auto:$('ghAuto').checked
+  };
+}
+
+function ghReady(config){
+  return /^[\w.-]+\/[\w.-]+$/.test(config.repo) && !!config.token;
+}
+
+function ghSave(){
+  const config=ghConfig();
+  try{
+    localStorage.setItem(GH_KEY,JSON.stringify({repo:config.repo,branch:config.branch,folder:config.folder,auto:config.auto}));
+    localStorage.setItem(GH_TOKEN_KEY,config.token);
+  }catch{}
+  const on=config.auto && ghReady(config);
+  $('gh').dataset.on=String(on);
+  $('ghState').textContent=on?'activée':(config.auto?'incomplète':'désactivée');
+}
+
+function initGithub(){
+  try{
+    const saved=JSON.parse(localStorage.getItem(GH_KEY)||'{}');
+    $('ghRepo').value=saved.repo||'';
+    $('ghBranch').value=saved.branch||'';
+    $('ghFolder').value=saved.folder||'cartes';
+    $('ghAuto').checked=!!saved.auto;
+    $('ghToken').value=localStorage.getItem(GH_TOKEN_KEY)||'';
+  }catch{ $('ghFolder').value='cartes'; }
+  ['ghRepo','ghBranch','ghFolder','ghToken','ghAuto'].forEach(id=>$(id).addEventListener('input',ghSave));
+  $('ghAuto').addEventListener('change',ghSave);
+  ghSave();
+}
+
+function blobToBase64(blob){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(String(reader.result).split(',')[1]);
+    reader.onerror=()=>reject(new Error('lecture de l’image impossible'));
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function pushToGitHub(config,filename,blob){
+  const path=config.folder?`${config.folder}/${filename}`:filename;
+  const url=`https://api.github.com/repos/${config.repo}/contents/${path.split('/').map(encodeURIComponent).join('/')}`;
+  const headers={
+    'Authorization':`Bearer ${config.token}`,
+    'Accept':'application/vnd.github+json',
+    'X-GitHub-Api-Version':'2022-11-28'
+  };
+  const explain=async response=>{
+    let detail='';
+    try{ detail=(await response.json()).message||''; }catch{}
+    if(response.status===401) return 'token invalide ou expiré';
+    if(response.status===403) return `accès refusé (${detail||'permissions du token'})`;
+    if(response.status===404) return 'dépôt, branche ou accès du token introuvable';
+    if(response.status===409||response.status===422) return detail||'conflit, réessaie';
+    return detail||`erreur ${response.status}`;
+  };
+
+  // Si le fichier existe déjà, il faut son sha pour l'écraser.
+  let sha;
+  const lookup=await fetch(config.branch?`${url}?ref=${encodeURIComponent(config.branch)}`:url,{headers,cache:'no-store'});
+  if(lookup.ok) sha=(await lookup.json()).sha;
+  else if(lookup.status!==404) throw new Error(await explain(lookup));
+  else if(config.branch){
+    // 404 peut aussi signaler une branche/un dépôt inexistant : on vérifie le dépôt.
+    const repoCheck=await fetch(`https://api.github.com/repos/${config.repo}`,{headers});
+    if(!repoCheck.ok) throw new Error(await explain(repoCheck));
+  }
+
+  const body={
+    message:`${sha?'Mise à jour':'Ajout'} de la carte ${state.name||filename}`,
+    content:await blobToBase64(blob)
+  };
+  if(config.branch) body.branch=config.branch;
+  if(sha) body.sha=sha;
+  const response=await fetch(url,{method:'PUT',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify(body)});
+  if(!response.ok) throw new Error(await explain(response));
+  return path;
 }
 
 const ICONS = {
@@ -1512,6 +1654,7 @@ async function initLibrary(){
 
 bind();
 draw();
+initGithub();
 initLibrary();
 </script>
 </body>
