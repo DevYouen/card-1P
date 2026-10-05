@@ -131,7 +131,7 @@
   .library[data-status="permission"] .statusDot{background:#e3a948;box-shadow:0 0 0 3px rgba(227,169,72,.14)}
   .library[data-status="unsupported"] .statusDot{background:#c45244}
   .libraryPath{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .libraryActions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .libraryActions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
   .libraryActions button{min-height:36px;padding:8px 6px}
   .count{min-width:18px;padding:1px 6px;border-radius:9px;background:rgba(217,178,63,.16);color:#f4d77b;font-size:10px;line-height:1.4}
   .editingInfo{display:flex;align-items:center;gap:6px;min-width:0;margin-top:9px;color:#8d9199;font-size:10px}
@@ -218,13 +218,12 @@
     <div class="sub">ÉDITEUR DE CARTE</div>
 
     <section id="library" class="library" data-status="disconnected" aria-label="Sauvegardes">
-      <div class="libraryStatus" title="Les cartes sont rangées dans backups/ à la racine du projet">
+      <div class="libraryStatus" title="Les cartes sont enregistrées sur ton dépôt GitHub">
         <span class="statusDot" aria-hidden="true"></span>
         <svg data-icon="folder"></svg>
-        <span id="projectStatus" class="libraryPath">Aucun dossier de projet connecté</span>
+        <span id="projectStatus" class="libraryPath">Serveur GitHub à configurer</span>
       </div>
       <div class="libraryActions">
-        <button id="connectBtn" type="button" title="Choisir le dossier du projet (celui qui contient index.html)"><svg data-icon="folder"></svg><span id="connectLabel">Dossier</span></button>
         <button id="saveBtn" type="button" class="accent" title="Enregistrer la carte (Ctrl+S)"><svg data-icon="save"></svg>Enregistrer</button>
         <button id="managerBtn" type="button" title="Gérer les cartes enregistrées"><svg data-icon="cards"></svg>Cartes<span id="cardCount" class="count">0</span></button>
       </div>
@@ -321,8 +320,7 @@
     </div>
 
     <details id="gh" class="gh" data-on="false">
-      <summary><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m-5 5 5-5 5 5M4 16v4h16v-4"/></svg>Publication GitHub<span id="ghState" class="ghState">désactivée</span></summary>
-      <label class="checkRow"><input id="ghAuto" type="checkbox" /><span>Envoyer sur GitHub à chaque export</span></label>
+      <summary><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m-5 5 5-5 5 5M4 16v4h16v-4"/></svg>Serveur GitHub<span id="ghState" class="ghState">à configurer</span></summary>
       <div class="field">
         <label for="ghRepo">Dépôt (propriétaire/nom)</label>
         <input id="ghRepo" placeholder="mon-compte/mon-site" autocomplete="off" spellcheck="false" />
@@ -1015,7 +1013,7 @@ async function downloadPNG(){
   a.href=canvas.toDataURL('image/png');
   a.click();
   const config=ghConfig();
-  if(config.auto && ghReady(config)){
+  if(ghReady(config)){
     const button=$('downloadBtn');
     button.disabled=true;
     try{
@@ -1027,8 +1025,9 @@ async function downloadPNG(){
     }finally{
       button.disabled=false;
     }
-  }else if(config.auto){
-    toast('Publication GitHub incomplète : renseigne dépôt et token','error');
+  }else{
+    toast('PNG téléchargé. Renseigne le dépôt et le token GitHub pour l’enregistrer aussi sur le serveur','error');
+    $('gh').open=true;
   }
 }
 
@@ -1041,8 +1040,7 @@ function ghConfig(){
     repo:$('ghRepo').value.trim().replace(/^https?:\/\/github\.com\//i,'').replace(/\.git$/,'').replace(/\/+$/,''),
     branch:$('ghBranch').value.trim(),
     folder:$('ghFolder').value.trim().replace(/^\/+|\/+$/g,''),
-    token:$('ghToken').value.trim(),
-    auto:$('ghAuto').checked
+    token:$('ghToken').value.trim()
   };
 }
 
@@ -1053,12 +1051,14 @@ function ghReady(config){
 function ghSave(){
   const config=ghConfig();
   try{
-    localStorage.setItem(GH_KEY,JSON.stringify({repo:config.repo,branch:config.branch,folder:config.folder,auto:config.auto}));
+    localStorage.setItem(GH_KEY,JSON.stringify({repo:config.repo,branch:config.branch,folder:config.folder}));
     localStorage.setItem(GH_TOKEN_KEY,config.token);
   }catch{}
-  const on=config.auto && ghReady(config);
+  const on=ghReady(config);
   $('gh').dataset.on=String(on);
-  $('ghState').textContent=on?'activée':(config.auto?'incomplète':'désactivée');
+  $('ghState').textContent=on?'prêt':'à configurer';
+  cardsLoaded=false;
+  updateLibraryStatus();
 }
 
 function initGithub(){
@@ -1067,12 +1067,11 @@ function initGithub(){
     $('ghRepo').value=saved.repo||'';
     $('ghBranch').value=saved.branch||'';
     $('ghFolder').value=saved.folder||'cartes';
-    $('ghAuto').checked=!!saved.auto;
     $('ghToken').value=localStorage.getItem(GH_TOKEN_KEY)||'';
   }catch{ $('ghFolder').value='cartes'; }
-  ['ghRepo','ghBranch','ghFolder','ghToken','ghAuto'].forEach(id=>$(id).addEventListener('input',ghSave));
-  $('ghAuto').addEventListener('change',ghSave);
+  ['ghRepo','ghBranch','ghFolder','ghToken'].forEach(id=>$(id).addEventListener('input',ghSave));
   ghSave();
+  $('gh').open=!ghReady(ghConfig());
 }
 
 function blobToBase64(blob){
@@ -1139,13 +1138,11 @@ const ICONS = {
   alert:'<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/>',
   image:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8" cy="9" r="1.5"/><path d="m21 15-5-5L5 20"/>'
 };
-const HANDLE_DB = 'one-prodige-card-studio';
-
-let projectHandle = null;
-let backupsDir = null;
 let currentCardId = null;
 let dirty = false;
 let savedCards = [];
+let cardsLoaded = false;
+let listError = '';
 let toastTimer = null;
 
 function hydrateIcon(svg){
@@ -1188,6 +1185,15 @@ function updateEditingInfo(){
   $('library').classList.toggle('is-dirty',dirty);
 }
 
+function updateLibraryStatus(){
+  const config=ghConfig();
+  const ready=ghReady(config);
+  const path=`${config.repo}/${ghBackupsPath(config)}`;
+  $('library').dataset.status=ready?'connected':'permission';
+  $('projectStatus').textContent=ready?`GitHub · ${path}`:'Serveur GitHub à configurer';
+  $('managerPath').textContent=ready?`${path}/`:'Serveur GitHub non configuré';
+}
+
 function syncInputs(){
   DATA_FIELDS.forEach(id=>{ $(id).value=state[id]; });
 }
@@ -1211,80 +1217,6 @@ function resetEditor(){
   draw();
 }
 
-function withHandleStore(mode,run){
-  return new Promise((resolve,reject)=>{
-    const request=indexedDB.open(HANDLE_DB,1);
-    request.onupgradeneeded=()=>request.result.createObjectStore('handles');
-    request.onerror=()=>reject(request.error);
-    request.onsuccess=()=>{
-      const database=request.result;
-      const transaction=database.transaction('handles',mode);
-      const operation=run(transaction.objectStore('handles'));
-      transaction.oncomplete=()=>{ database.close(); resolve(operation.result); };
-      transaction.onerror=()=>{ database.close(); reject(transaction.error); };
-    };
-  });
-}
-
-const readStoredHandle=()=>withHandleStore('readonly',store=>store.get('project')).catch(()=>null);
-const storeHandle=handle=>withHandleStore('readwrite',store=>store.put(handle,'project')).catch(()=>{});
-
-async function hasPermission(handle,request){
-  const options={mode:'readwrite'};
-  if(await handle.queryPermission(options)==='granted') return true;
-  return request && await handle.requestPermission(options)==='granted';
-}
-
-function setLibraryStatus(status,text){
-  $('library').dataset.status=status;
-  $('projectStatus').textContent=text;
-  $('connectLabel').textContent={connected:'Changer',permission:'Réactiver'}[status]||'Dossier';
-}
-
-async function hasFile(directory,name){
-  try{ await directory.getFileHandle(name); return true; }
-  catch{ return false; }
-}
-
-async function useProjectHandle(handle){
-  backupsDir=await handle.getDirectoryHandle('backups',{create:true});
-  projectHandle=handle;
-  setLibraryStatus('connected',`${handle.name}/backups`);
-  $('managerPath').textContent=`${handle.name}/backups/`;
-  await refreshCards();
-}
-
-async function connectProject(){
-  if(!('showDirectoryPicker' in window)){
-    toast('Ce navigateur ne permet pas l’accès aux dossiers. Utilise Chrome ou Edge.','error');
-    return false;
-  }
-  try{
-    if(projectHandle && !backupsDir && await hasPermission(projectHandle,true)){
-      await useProjectHandle(projectHandle);
-      toast('Dossier du projet reconnecté');
-      return true;
-    }
-    const handle=await window.showDirectoryPicker({id:'one-prodige-cards',mode:'readwrite'});
-    if(!await hasFile(handle,'index.html') && !confirm(`« ${handle.name} » ne contient pas index.html. Utiliser ce dossier quand même ?`)) return false;
-    await useProjectHandle(handle);
-    await storeHandle(handle);
-    toast(`Sauvegardes liées à ${handle.name}/backups`);
-    return true;
-  }catch(error){
-    if(error.name!=='AbortError') toast(`Connexion impossible : ${error.message}`,'error');
-    return false;
-  }
-}
-
-const readFile=async(directory,name)=>(await directory.getFileHandle(name)).getFile();
-
-async function writeFile(directory,name,blob){
-  const writable=await (await directory.getFileHandle(name,{create:true})).createWritable();
-  await writable.write(blob);
-  await writable.close();
-}
-
 function canvasToBlob(source,type,quality){
   return new Promise((resolve,reject)=>source.toBlob(blob=>blob?resolve(blob):reject(new Error('export de l’image impossible')),type,quality));
 }
@@ -1306,7 +1238,7 @@ function imageExtension(blob,name){
 }
 
 function slugify(text){
-  return String(text||'carte').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40)||'carte';
+  return String(text||'carte').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40)||'carte';
 }
 
 function downloadBlob(blob,filename){
@@ -1337,48 +1269,136 @@ function createThumbnail(){
   return canvasToBlob(thumbnail,'image/webp',.9);
 }
 
+/* ---------- Stockage sur le serveur GitHub ---------- */
+const ghEnc=path=>path.split('/').map(encodeURIComponent).join('/');
+const ghBackupsPath=config=>`${config.folder?config.folder+'/':''}backups`;
+const ghRef=config=>config.branch?`?ref=${encodeURIComponent(config.branch)}`:'';
+const MIME_BY_EXT={png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',webp:'image/webp',json:'application/json'};
+
+async function ghApi(config,path,options={}){
+  const response=await fetch(`https://api.github.com/repos/${config.repo}/${path}`,{
+    ...options,
+    headers:{
+      'Authorization':`Bearer ${config.token}`,
+      'Accept':'application/vnd.github+json',
+      'X-GitHub-Api-Version':'2022-11-28',
+      ...(options.body?{'Content-Type':'application/json'}:{})
+    },
+    body:options.body?JSON.stringify(options.body):undefined,
+    cache:'no-store'
+  });
+  if(!response.ok){
+    let detail='';
+    try{ detail=(await response.json()).message||''; }catch{}
+    const message=response.status===401?'token invalide ou expiré'
+      :response.status===403?`accès refusé (${detail||'permissions du token'})`
+      :response.status===404?'dépôt, branche ou accès du token introuvable'
+      :(detail||`erreur ${response.status}`);
+    throw Object.assign(new Error(message),{status:response.status});
+  }
+  return response.json();
+}
+
+async function ghRawBlob(config,path){
+  const response=await fetch(`https://api.github.com/repos/${config.repo}/contents/${ghEnc(path)}${ghRef(config)}`,{
+    headers:{
+      'Authorization':`Bearer ${config.token}`,
+      'Accept':'application/vnd.github.raw+json',
+      'X-GitHub-Api-Version':'2022-11-28'
+    },
+    cache:'no-store'
+  });
+  if(!response.ok) throw Object.assign(new Error(`fichier introuvable (${response.status})`),{status:response.status});
+  const extension=/\.(\w+)$/.exec(path)?.[1].toLowerCase();
+  return new Blob([await response.arrayBuffer()],{type:MIME_BY_EXT[extension]||''});
+}
+
+// Un seul commit pour tout : blobs envoyés en parallèle, suppressions via sha null.
+async function commitToGitHub(config,message,{upload=[],remove=[]}){
+  let branch=config.branch;
+  if(!branch) branch=(await ghApi(config,'')).default_branch;
+  const ref=await ghApi(config,`git/ref/heads/${encodeURIComponent(branch)}`);
+  const parentSha=ref.object.sha;
+  const [parent,entries]=await Promise.all([
+    ghApi(config,`git/commits/${parentSha}`),
+    Promise.all(upload.map(async item=>({
+      path:item.path,
+      mode:'100644',
+      type:'blob',
+      sha:(await ghApi(config,'git/blobs',{method:'POST',body:{content:await blobToBase64(item.blob),encoding:'base64'}})).sha
+    })))
+  ]);
+  for(const path of remove) entries.push({path,mode:'100644',type:'blob',sha:null});
+  const tree=await ghApi(config,'git/trees',{method:'POST',body:{base_tree:parent.tree.sha,tree:entries}});
+  const commit=await ghApi(config,'git/commits',{method:'POST',body:{message,tree:tree.sha,parents:[parentSha]}});
+  await ghApi(config,`git/refs/heads/${encodeURIComponent(branch)}`,{method:'PATCH',body:{sha:commit.sha}});
+}
+
+function requireServer(){
+  const config=ghConfig();
+  if(ghReady(config)) return config;
+  toast('Renseigne le dépôt et le token GitHub pour utiliser le serveur','error');
+  $('gh').open=true;
+  return null;
+}
+
 async function saveCard(){
-  if(!backupsDir && !await connectProject()) return;
+  const config=requireServer();
+  if(!config) return;
   const button=$('saveBtn');
   button.disabled=true;
   try{
     const now=new Date().toISOString();
     const isNew=!currentCardId;
     const id=currentCardId||`${slugify(state.name)}-${Date.now().toString(36)}`;
-    const directory=await backupsDir.getDirectoryHandle(id,{create:true});
-    let createdAt=now;
-    try{ createdAt=JSON.parse(await (await readFile(directory,'card.json')).text()).createdAt||now; }catch{}
+    const previous=savedCards.find(card=>card.id===id);
 
     const files={card:'card.png',thumbnail:'thumbnail.webp'};
     if(characterBlob) files.render=`render.${imageExtension(characterBlob,characterSourceName)}`;
     if(backgroundBlob) files.background=`background.${imageExtension(backgroundBlob,backgroundSourceName)}`;
 
-    const staleFiles=[];
-    for await(const [name,handle] of directory.entries()){
-      if(handle.kind==='file' && /^(render|background)\./.test(name) && !Object.values(files).includes(name)) staleFiles.push(name);
-    }
-    await Promise.all(staleFiles.map(name=>directory.removeEntry(name)));
-
-    if(characterBlob) await writeFile(directory,files.render,characterBlob);
-    if(backgroundBlob) await writeFile(directory,files.background,backgroundBlob);
-    await writeFile(directory,files.card,await canvasToBlob(canvas,'image/png'));
-    await writeFile(directory,files.thumbnail,await createThumbnail());
+    const [cardBlob,thumbBlob]=await Promise.all([canvasToBlob(canvas,'image/png'),createThumbnail()]);
     const record={
       version:1,
       id,
-      createdAt,
+      createdAt:previous?.meta.createdAt||now,
       updatedAt:now,
       data:Object.fromEntries(DATA_FIELDS.map(key=>[key,state[key]])),
       files,
       sources:{render:characterSourceName||null,background:backgroundSourceName||null}
     };
-    await writeFile(directory,'card.json',new Blob([JSON.stringify(record,null,2)],{type:'application/json'}));
+    const jsonBlob=new Blob([JSON.stringify(record,null,2)],{type:'application/json'});
+
+    const target=`${ghBackupsPath(config)}/${id}`;
+    const upload=[
+      {path:`${target}/${files.card}`,blob:cardBlob},
+      {path:`${target}/${files.thumbnail}`,blob:thumbBlob},
+      {path:`${target}/card.json`,blob:jsonBlob}
+    ];
+    if(characterBlob) upload.push({path:`${target}/${files.render}`,blob:characterBlob});
+    if(backgroundBlob) upload.push({path:`${target}/${files.background}`,blob:backgroundBlob});
+    const remove=[];
+    for(const key of ['render','background']){
+      const old=previous?.meta.files?.[key];
+      if(old && old!==files[key]) remove.push(`${target}/${old}`);
+    }
+    await commitToGitHub(config,`${isNew?'Ajout':'Mise à jour'} de la carte ${state.name||id}`,{upload,remove});
 
     currentCardId=id;
     dirty=false;
     updateEditingInfo();
-    toast(isNew?`Carte enregistrée dans backups/${id}`:'Modifications enregistrées');
-    await refreshCards();
+    if(cardsLoaded){
+      const entry={id,meta:record,thumb:URL.createObjectURL(thumbBlob)};
+      const index=savedCards.findIndex(card=>card.id===id);
+      if(index>=0){
+        if(savedCards[index].thumb) URL.revokeObjectURL(savedCards[index].thumb);
+        savedCards[index]=entry;
+      }else savedCards.unshift(entry);
+      savedCards.sort((first,second)=>String(second.meta.updatedAt||'').localeCompare(String(first.meta.updatedAt||'')));
+      $('cardCount').textContent=savedCards.length;
+      renderCards();
+    }
+    toast(isNew?`Carte enregistrée sur GitHub : ${target}`:'Modifications enregistrées sur GitHub');
   }catch(error){
     toast(`Enregistrement impossible : ${error.message}`,'error');
   }finally{
@@ -1387,22 +1407,30 @@ async function saveCard(){
 }
 
 async function refreshCards(){
+  const config=ghConfig();
   for(const card of savedCards) if(card.thumb) URL.revokeObjectURL(card.thumb);
-  const cards=[];
-  if(backupsDir){
-    for await(const [name,handle] of backupsDir.entries()){
-      if(handle.kind!=='directory') continue;
-      try{
-        const meta=JSON.parse(await (await readFile(handle,'card.json')).text());
-        let thumb='';
-        try{ thumb=URL.createObjectURL(await readFile(handle,meta.files?.thumbnail||'thumbnail.webp')); }catch{}
-        cards.push({id:name,dir:handle,meta,thumb});
-      }catch{}
-    }
+  savedCards=[];
+  listError='';
+  if(ghReady(config)){
+    try{
+      let entries=[];
+      try{ entries=await ghApi(config,`contents/${ghEnc(ghBackupsPath(config))}${ghRef(config)}`); }
+      catch(error){ if(error.status!==404) throw error; }
+      const directories=entries.filter(entry=>entry.type==='dir');
+      const cards=await Promise.all(directories.map(async entry=>{
+        try{
+          const meta=JSON.parse(await (await ghRawBlob(config,`${entry.path}/card.json`)).text());
+          let thumb='';
+          try{ thumb=URL.createObjectURL(await ghRawBlob(config,`${entry.path}/${meta.files?.thumbnail||'thumbnail.webp'}`)); }catch{}
+          return {id:entry.name,meta,thumb};
+        }catch{ return null; }
+      }));
+      savedCards=cards.filter(Boolean);
+      cardsLoaded=true;
+    }catch(error){ listError=error.message; }
   }
-  cards.sort((first,second)=>String(second.meta.updatedAt||'').localeCompare(String(first.meta.updatedAt||'')));
-  savedCards=cards;
-  $('cardCount').textContent=cards.length;
+  savedCards.sort((first,second)=>String(second.meta.updatedAt||'').localeCompare(String(first.meta.updatedAt||'')));
+  $('cardCount').textContent=savedCards.length;
   renderCards();
 }
 
@@ -1428,12 +1456,16 @@ function showEmpty(iconName,title,text,action){
 function renderCards(){
   const grid=$('cardGrid');
   grid.replaceChildren();
-  if(!backupsDir){
-    showEmpty('folder','Aucun dossier connecté','Choisis le dossier du projet : un dossier backups/ y sera créé pour ranger chaque carte.',{
+  if(!ghReady(ghConfig())){
+    showEmpty('folder','Serveur GitHub non configuré','Renseigne le dépôt et le token dans « Serveur GitHub » : les cartes y seront enregistrées.',{
       icon:'folder',
-      label:projectHandle?'Réactiver l’accès':'Choisir le dossier',
-      run:connectProject
+      label:'Configurer',
+      run:()=>{ $('manager').close(); $('gh').open=true; $('gh').scrollIntoView({block:'center'}); }
     });
+    return;
+  }
+  if(listError){
+    showEmpty('alert','Lecture impossible',listError,{icon:'refresh',label:'Réessayer',run:refreshCards});
     return;
   }
   if(!savedCards.length){
@@ -1531,14 +1563,10 @@ function createCardItem(card){
   return item;
 }
 
-async function readImageCopy(directory,name){
-  // Copy into memory: overwriting the saved file later would invalidate the File snapshot.
-  const file=await readFile(directory,name);
-  return new Blob([await file.arrayBuffer()],{type:file.type});
-}
-
 async function openCard(card){
   if(!confirmDiscard()) return;
+  const config=requireServer();
+  if(!config) return;
   try{
     const data=card.meta.data||{};
     const files=card.meta.files||{};
@@ -1552,8 +1580,11 @@ async function openCard(card){
     });
     if(!RARITY_STYLES[nextState.rarity]) nextState.rarity=DEFAULT_STATE.rarity;
 
-    const renderBlob=files.render?await readImageCopy(card.dir,files.render):null;
-    const backgroundFile=files.background?await readImageCopy(card.dir,files.background):null;
+    const base=`${ghBackupsPath(config)}/${card.id}`;
+    const [renderBlob,backgroundFile]=await Promise.all([
+      files.render?ghRawBlob(config,`${base}/${files.render}`):null,
+      files.background?ghRawBlob(config,`${base}/${files.background}`):null
+    ]);
     const [renderImage,backgroundImage]=await Promise.all([
       renderBlob&&imageFromBlob(renderBlob),
       backgroundFile&&imageFromBlob(backgroundFile)
@@ -1580,22 +1611,32 @@ async function openCard(card){
 }
 
 async function deleteCard(card){
+  const config=requireServer();
+  if(!config) return;
   try{
-    await backupsDir.removeEntry(card.id,{recursive:true});
+    const base=`${ghBackupsPath(config)}/${card.id}`;
+    const entries=await ghApi(config,`contents/${ghEnc(base)}${ghRef(config)}`);
+    const remove=entries.filter(entry=>entry.type==='file').map(entry=>entry.path);
+    if(remove.length) await commitToGitHub(config,`Suppression de la carte ${card.meta.data?.name||card.id}`,{remove});
+    if(card.thumb) URL.revokeObjectURL(card.thumb);
+    savedCards=savedCards.filter(item=>item.id!==card.id);
+    $('cardCount').textContent=savedCards.length;
     if(card.id===currentCardId){
       currentCardId=null;
       markDirty();
     }
-    toast(`« ${card.meta.data?.name||card.id} » supprimée`);
-    await refreshCards();
+    toast(`« ${card.meta.data?.name||card.id} » supprimée du serveur`);
+    renderCards();
   }catch(error){
     toast(`Suppression impossible : ${error.message}`,'error');
   }
 }
 
 async function downloadSavedCard(card){
+  const config=requireServer();
+  if(!config) return;
   try{
-    downloadBlob(await readFile(card.dir,card.meta.files?.card||'card.png'),`${slugify(card.meta.data?.name)}.png`);
+    downloadBlob(await ghRawBlob(config,`${ghBackupsPath(config)}/${card.id}/${card.meta.files?.card||'card.png'}`),`${slugify(card.meta.data?.name)}.png`);
     toast('PNG téléchargé');
   }catch(error){
     toast(`PNG introuvable : ${error.message}`,'error');
@@ -1605,17 +1646,16 @@ async function downloadSavedCard(card){
 function bindLibrary(){
   document.querySelectorAll('svg[data-icon]').forEach(hydrateIcon);
   const manager=$('manager');
-  $('connectBtn').addEventListener('click',connectProject);
   $('saveBtn').addEventListener('click',saveCard);
   $('managerBtn').addEventListener('click',async()=>{
     manager.showModal();
     renderCards();
-    if(backupsDir) await refreshCards();
+    if(ghReady(ghConfig()) && !cardsLoaded) await refreshCards();
   });
   $('closeManagerBtn').addEventListener('click',()=>manager.close());
   $('refreshBtn').addEventListener('click',async()=>{
     await refreshCards();
-    toast('Liste actualisée');
+    if(!listError) toast('Liste actualisée');
   });
   $('newCardBtn').addEventListener('click',()=>{
     if(!confirmDiscard()) return;
@@ -1633,23 +1673,10 @@ function bindLibrary(){
   });
 }
 
-async function initLibrary(){
+function initLibrary(){
   updateEditingInfo();
-  if(!('showDirectoryPicker' in window)){
-    setLibraryStatus('unsupported','Navigateur non compatible : utilise Chrome ou Edge');
-    $('connectBtn').disabled=true;
-    $('saveBtn').disabled=true;
-    return;
-  }
-  const stored=await readStoredHandle();
-  if(!stored) return;
-  projectHandle=stored;
-  try{
-    if(await hasPermission(stored,false)) await useProjectHandle(stored);
-    else setLibraryStatus('permission',`${stored.name} : accès à réactiver`);
-  }catch{
-    setLibraryStatus('permission',`${stored.name} : accès à réactiver`);
-  }
+  updateLibraryStatus();
+  if(ghReady(ghConfig())) refreshCards();
 }
 
 bind();
