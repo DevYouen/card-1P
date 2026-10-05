@@ -92,7 +92,7 @@
   .fileName{display:block;overflow:hidden;margin-top:3px;color:#999a9c;font-size:9px;text-overflow:ellipsis;white-space:nowrap}
   input[type="range"]{padding:0;accent-color:#d9b23f;cursor:pointer}
   .hint{font-size:10px;color:#96989b;margin-top:6px;line-height:1.45}
-  .buttons{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1fr) minmax(0,1.2fr);gap:8px;margin:0}
+  .buttons{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.4fr);gap:8px;margin:0}
   .panelActions{position:sticky;bottom:-1px;z-index:3;margin:14px -18px 0;padding:12px 18px 14px;border-top:1px solid rgba(217,178,63,.18);background:linear-gradient(180deg,rgba(19,20,22,.94),#121315 35%);backdrop-filter:blur(10px)}
   button{
     display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;
@@ -109,57 +109,70 @@
   .tiny{font-size:9px;color:#8d9199;line-height:1.4;margin-top:8px}
   .sectionTitle{display:flex;align-items:center;gap:9px;margin-top:14px;padding-top:11px;border-top:1px solid rgba(217,178,63,.16);color:#d9b23f;font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase}
   .sectionTitle svg{width:16px;height:16px;flex:none;padding:2px;border:1px solid rgba(217,178,63,.22);border-radius:4px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-  button:disabled{opacity:.55;cursor:progress;filter:none}
-  .headerTools{display:flex;align-items:center;gap:8px;flex:none}
-  .iconBtn{position:relative;width:42px;min-width:42px;height:42px;min-height:42px;padding:0;border-color:rgba(217,178,63,.3);background:#17181b;color:#f4d77b}
-  .iconBtn svg{width:17px;height:17px}
-  .countBadge{position:absolute;top:-7px;right:-7px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#d9b23f;color:#17120a;font-size:9px;font-weight:800;line-height:18px;text-align:center}
-  .countBadge:empty{display:none}
-  .saveStatus{display:flex;align-items:center;gap:7px;min-width:0;margin-bottom:10px;color:#a8abb2;font-size:10px;line-height:1.35}
-  .saveStatus::before{content:'';flex:none;width:7px;height:7px;border-radius:50%;background:#5c5f66}
-  .saveStatus[data-state="saved"]::before{background:#d9b23f;box-shadow:0 0 8px rgba(217,178,63,.6)}
-  .saveStatus span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  dialog.library{width:min(980px,calc(100vw - 32px));max-height:calc(100vh - 48px);padding:0;border:1px solid rgba(217,178,63,.25);border-radius:12px;background:linear-gradient(165deg,#1b1c1f,#0f1012);color:#fff;box-shadow:0 30px 90px #000c;overflow:hidden}
-  dialog.library[open]{display:flex;flex-direction:column}
-  dialog.library::backdrop{background:rgba(5,4,3,.74);backdrop-filter:blur(4px)}
-  .libraryHead{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px 22px 16px;border-bottom:1px solid rgba(217,178,63,.18)}
-  .libraryHead h2{margin:0;font-family:Georgia,serif;font-size:22px;color:#f8f3e8}
-  .libraryFolder{margin:6px 0 0;color:#d7d9dd;font-size:11px}
-  .libraryHint{margin:4px 0 0;color:#8d9199;font-size:10px}
-  .libraryTools{display:flex;gap:8px;flex:none}
-  .libraryBar{display:flex;align-items:center;gap:12px;padding:14px 22px}
-  .search{position:relative;display:block;flex:1;margin:0}
-  .search svg{position:absolute;left:11px;top:50%;width:15px;height:15px;transform:translateY(-50%);fill:none;stroke:#8d9199;stroke-width:1.8;stroke-linecap:round}
-  .search input{padding-left:34px}
-  .libraryCount{flex:none;color:#8d9199;font-size:11px}
-  .libraryGrid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));align-content:start;gap:14px;padding:4px 22px 22px;overflow-y:auto}
-  .libraryGrid[hidden]{display:none}
-  .cardItem{display:flex;flex-direction:column;min-width:0;border:1px solid #2e3035;border-radius:8px;background:#141518;overflow:hidden;transition:border-color .16s ease,transform .16s ease}
-  .cardItem:hover{border-color:rgba(217,178,63,.45);transform:translateY(-2px)}
-  .cardItem.is-current{border-color:#d9b23f;box-shadow:0 0 0 1px rgba(217,178,63,.4)}
-  .cardThumb{display:block;width:100%;aspect-ratio:5/7;min-height:0;padding:0;border:0;border-radius:0;background:#0b0b0c}
-  .cardThumb img{display:block;width:100%;height:100%;object-fit:cover}
-  .cardInfo{display:grid;gap:6px;min-width:0;padding:10px 11px 8px}
-  .cardInfo strong{overflow:hidden;color:#f8f3e8;font-family:Georgia,serif;font-size:14px;text-overflow:ellipsis;white-space:nowrap}
-  .cardMeta{display:flex;align-items:center;justify-content:space-between;gap:6px;min-width:0}
-  .rarityChip{padding:2px 7px;border:1px solid var(--chip);border-radius:20px;color:var(--chip);font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
-  .cardDate{color:#8d9199;font-size:9px;white-space:nowrap}
-  .cardActions{display:flex;gap:6px;padding:0 11px 11px}
-  .cardActions button{width:34px;min-width:34px;min-height:34px;padding:6px;background:#1c1d21;font-size:10px}
-  .cardActions .grow{flex:1;width:auto}
-  .cardActions button svg{width:14px;height:14px}
-  .cardActions .danger:hover,.cardActions .danger.is-confirm{border-color:#b6483b;background:#3a1714;color:#ffb3a8}
-  .cardActions .danger.is-confirm{width:auto;padding:6px 9px}
-  .confirmText{display:none}
-  .danger.is-confirm .confirmText{display:inline}
-  .danger.is-confirm svg{display:none}
-  .libraryEmpty{display:none;flex-direction:column;align-items:center;gap:10px;padding:48px 22px 56px;color:#a8abb2;font-size:12px;text-align:center}
-  .libraryEmpty.is-visible{display:flex}
-  .libraryEmpty svg{width:34px;height:34px;fill:none;stroke:#d9b23f;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
-  .libraryEmpty strong{color:#f1e4b6;font-size:14px}
-  .toast{position:fixed;left:50%;bottom:24px;z-index:20;max-width:calc(100vw - 32px);padding:11px 16px;border:1px solid rgba(217,178,63,.45);border-radius:6px;background:#17181b;color:#f8f3e8;font-size:12px;box-shadow:0 12px 30px #000a;opacity:0;pointer-events:none;transform:translate(-50%,12px);transition:opacity .2s ease,transform .2s ease}
+  [hidden]{display:none!important}
+  svg[data-icon]{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  button:disabled{opacity:.48;cursor:not-allowed;filter:none}
+  button.accent{border-color:rgba(217,178,63,.55);background:#1f1b11;color:#f4d77b}
+  button.accent:hover{background:#2a2414}
+  .library{margin:0 0 6px;padding:11px;border:1px solid rgba(217,178,63,.16);border-radius:8px;background:rgba(6,6,7,.42)}
+  .libraryStatus{display:flex;align-items:center;gap:7px;min-width:0;margin-bottom:10px;color:#c9cbd0;font-size:11px}
+  .libraryStatus svg[data-icon]{width:14px;height:14px;color:#d9b23f}
+  .statusDot{width:7px;height:7px;flex:none;border-radius:50%;background:#5c5f66}
+  .library[data-status="connected"] .statusDot{background:#79c98a;box-shadow:0 0 0 3px rgba(121,201,138,.14)}
+  .library[data-status="permission"] .statusDot{background:#e3a948;box-shadow:0 0 0 3px rgba(227,169,72,.14)}
+  .library[data-status="unsupported"] .statusDot{background:#c45244}
+  .libraryPath{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .libraryActions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+  .libraryActions button{min-height:36px;padding:8px 6px}
+  .count{min-width:18px;padding:1px 6px;border-radius:9px;background:rgba(217,178,63,.16);color:#f4d77b;font-size:10px;line-height:1.4}
+  .editingInfo{display:flex;align-items:center;gap:6px;min-width:0;margin-top:9px;color:#8d9199;font-size:10px}
+  .editingInfo svg[data-icon]{width:13px;height:13px}
+  .editingInfo strong{overflow:hidden;color:#e9e2cf;font-weight:700;text-overflow:ellipsis;white-space:nowrap}
+  .dirtyMark{display:none;flex:none;color:#e3a948}
+  .library.is-dirty .dirtyMark{display:inline}
+  .manager{width:min(1080px,calc(100vw - 32px));max-height:calc(100vh - 48px);padding:0;border:1px solid rgba(217,178,63,.22);border-radius:12px;background:#121315;color:#fff;box-shadow:0 30px 90px #000a}
+  .manager[open]{display:flex;flex-direction:column}
+  .manager::backdrop{background:rgba(3,3,4,.74);backdrop-filter:blur(4px)}
+  .managerHeader{display:flex;align-items:center;gap:14px;padding:16px 18px;border-bottom:1px solid rgba(217,178,63,.16)}
+  .managerTitle{min-width:0}
+  .managerTitle h2{margin:0;font-family:Georgia,serif;font-size:19px;color:#f8f3e8}
+  .managerTitle span{display:block;margin-top:3px;overflow:hidden;color:#8d9199;font-size:11px;text-overflow:ellipsis;white-space:nowrap}
+  .managerTools{display:flex;align-items:center;gap:8px;margin-left:auto}
+  .searchBox{position:relative;display:block;width:230px;margin:0}
+  .searchBox svg[data-icon]{position:absolute;top:50%;left:10px;width:15px;height:15px;color:#8d9199;transform:translateY(-50%);pointer-events:none}
+  .searchBox input{padding-left:32px}
+  .iconBtn{width:38px;min-width:38px;padding:0}
+  .cardGrid{display:grid;flex:1;min-height:0;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;padding:18px;overflow:auto}
+  .savedCard{display:flex;flex-direction:column;min-width:0;overflow:hidden;border:1px solid #2b2d32;border-radius:8px;background:#17181b;transition:border-color .16s ease,transform .16s ease}
+  .savedCard:hover{border-color:#5f512b;transform:translateY(-2px)}
+  .savedCard.is-current{border-color:#d9b23f}
+  .savedPreview{display:grid;place-items:center;width:100%;aspect-ratio:5/7;min-height:0;padding:0;border:0;border-radius:0;background:#0a0a0b;color:#55575c}
+  .savedPreview img{display:block;width:100%;height:100%;object-fit:cover}
+  .savedPreview svg[data-icon]{width:28px;height:28px}
+  .savedMeta{display:grid;gap:4px;min-width:0;padding:10px 11px 2px}
+  .savedName{overflow:hidden;color:#f5efe0;font-size:13px;text-overflow:ellipsis;white-space:nowrap}
+  .savedInfo{display:flex;align-items:center;gap:6px;color:#b0b2b7;font-size:10px}
+  .rarityDot{width:8px;height:8px;flex:none;border-radius:50%}
+  .savedDate{color:#74777d;font-size:9px}
+  .savedActions{display:flex;gap:6px;padding:9px 11px 11px}
+  .savedActions > button:first-child{flex:1;min-width:0}
+  .danger:hover{border-color:#b6483c;color:#ffb4a8}
+  .danger.is-confirming{width:auto;padding:0 10px;border-color:#c45244;background:#6f251e;color:#fff}
+  .emptyState{display:grid;justify-items:center;gap:8px;padding:56px 24px;color:#a8abb2;text-align:center}
+  .emptyState svg[data-icon]{width:30px;height:30px;color:#d9b23f}
+  .emptyState strong{color:#f5efe0;font-size:15px}
+  .emptyState p{max-width:360px;margin:0 0 8px;font-size:12px;line-height:1.5}
+  .toast{position:fixed;bottom:24px;left:50%;z-index:60;display:flex;align-items:center;gap:9px;max-width:min(460px,calc(100vw - 32px));padding:11px 14px;border:1px solid rgba(217,178,63,.35);border-radius:8px;background:#17181b;color:#f2ecdc;font-size:12px;box-shadow:0 16px 40px #0009;opacity:0;pointer-events:none;transform:translate(-50%,14px);transition:opacity .2s ease,transform .2s ease}
+  .toast svg[data-icon]{color:#79c98a}
+  .toast.is-error{border-color:#b6483c}
+  .toast.is-error svg[data-icon]{color:#ff8f80}
   .toast.is-visible{opacity:1;transform:translate(-50%,0)}
-  .toast[data-type="error"]{border-color:#b6483b;color:#ffcbc3}
+  @media(max-width:700px){
+    .managerHeader{flex-wrap:wrap}
+    .managerTools{width:100%;margin-left:0}
+    .searchBox{flex:1;width:auto}
+    .cardGrid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+  }
   .stage{
     min-height:calc(100vh - 44px);
     display:flex;align-items:center;justify-content:center;
@@ -191,12 +204,23 @@
         <div class="eyebrow">ONE PRODIGE · CARD STUDIO</div>
         <h1>Gold Card Generator</h1>
       </div>
-      <div class="headerTools">
-        <button id="openLibraryBtn" class="iconBtn" type="button" title="Bibliothèque de cartes" aria-label="Ouvrir la bibliothèque de cartes"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="12" height="15" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v13"/></svg><span id="libraryCountBadge" class="countBadge"></span></button>
-        <div class="formatBadge"><span>5:7</span><span>HD</span></div>
-      </div>
+      <div class="formatBadge"><span>5:7</span><span>HD</span></div>
     </div>
     <div class="sub">ÉDITEUR DE CARTE</div>
+
+    <section id="library" class="library" data-status="disconnected" aria-label="Sauvegardes">
+      <div class="libraryStatus" title="Les cartes sont rangées dans backups/ à la racine du projet">
+        <span class="statusDot" aria-hidden="true"></span>
+        <svg data-icon="folder"></svg>
+        <span id="projectStatus" class="libraryPath">Aucun dossier de projet connecté</span>
+      </div>
+      <div class="libraryActions">
+        <button id="connectBtn" type="button" title="Choisir le dossier du projet (celui qui contient index.html)"><svg data-icon="folder"></svg><span id="connectLabel">Dossier</span></button>
+        <button id="saveBtn" type="button" class="accent" title="Enregistrer la carte (Ctrl+S)"><svg data-icon="save"></svg>Enregistrer</button>
+        <button id="managerBtn" type="button" title="Gérer les cartes enregistrées"><svg data-icon="cards"></svg>Cartes<span id="cardCount" class="count">0</span></button>
+      </div>
+      <div class="editingInfo"><svg data-icon="edit"></svg><strong id="editingName">Nouvelle carte</strong><span class="dirtyMark">· non enregistrée</span></div>
+    </section>
 
     <div class="sectionTitle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Contenu</div>
     <div class="field">
@@ -288,11 +312,9 @@
     </div>
 
     <div class="panelActions">
-      <div id="saveStatus" class="saveStatus" data-state="draft"><span>Nouvelle carte non enregistrée</span></div>
       <div class="buttons">
-        <button id="resetBtn" type="button" title="Nouvelle carte"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Nouvelle</button>
-        <button id="saveBtn" type="button" title="Enregistrer dans backups (Ctrl+S)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg><span id="saveLabel">Enregistrer</span></button>
-        <button id="downloadBtn" class="primary" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 19h16"/></svg>Exporter PNG</button>
+        <button id="resetBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11a9 9 0 1 1 2.64 6.36M3 4v7h7"/></svg>Réinitialiser</button>
+        <button id="downloadBtn" class="primary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 19h16"/></svg>Exporter PNG</button>
       </div>
       <div class="tiny">PNG · 1500 × 2100 px · portrait 5:7</div>
     </div>
@@ -303,29 +325,21 @@
   </main>
 </div>
 
-<dialog id="libraryDialog" class="library" aria-labelledby="libraryTitle">
-  <div class="libraryHead">
-    <div>
-      <div class="eyebrow">ONE PRODIGE · CARD STUDIO</div>
-      <h2 id="libraryTitle">Bibliothèque de cartes</h2>
-      <p id="libraryFolder" class="libraryFolder">Aucun dossier connecté</p>
-      <p class="libraryHint">Chaque carte : backups / nom-de-la-carte / card.json, preview.png, render et fond.</p>
+<dialog id="manager" class="manager" aria-labelledby="managerTitle">
+  <header class="managerHeader">
+    <div class="managerTitle">
+      <h2 id="managerTitle">Mes cartes</h2>
+      <span id="managerPath">backups/</span>
     </div>
-    <div class="libraryTools">
-      <button id="connectFolderBtn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg><span>Choisir le dossier</span></button>
-      <button id="closeLibraryBtn" class="iconBtn" type="button" title="Fermer" aria-label="Fermer la bibliothèque"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <div class="managerTools">
+      <label class="searchBox"><svg data-icon="search"></svg><input id="cardSearch" type="search" placeholder="Rechercher une carte" aria-label="Rechercher une carte" /></label>
+      <button id="newCardBtn" type="button" title="Commencer une nouvelle carte"><svg data-icon="plus"></svg>Nouvelle</button>
+      <button id="refreshBtn" type="button" class="iconBtn" title="Actualiser" aria-label="Actualiser la liste"><svg data-icon="refresh"></svg></button>
+      <button id="closeManagerBtn" type="button" class="iconBtn" title="Fermer" aria-label="Fermer le gestionnaire"><svg data-icon="close"></svg></button>
     </div>
-  </div>
-  <div class="libraryBar">
-    <label class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="librarySearch" type="search" placeholder="Rechercher un nom, une rareté, un numéro" aria-label="Rechercher une carte" /></label>
-    <span id="libraryCount" class="libraryCount">0 carte</span>
-  </div>
-  <div id="libraryGrid" class="libraryGrid"></div>
-  <div id="libraryEmpty" class="libraryEmpty">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>
-    <strong id="libraryEmptyTitle">Aucun dossier connecté</strong>
-    <span id="libraryEmptyText"></span>
-  </div>
+  </header>
+  <div id="cardGrid" class="cardGrid"></div>
+  <div id="emptyState" class="emptyState" hidden></div>
 </dialog>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
@@ -371,7 +385,7 @@ const $ = id => document.getElementById(id);
 let character = null;
 let background = null;
 
-const DEFAULT_STATE = Object.freeze({
+const state = {
   name: 'JULLE',
   number: '10',
   rarity: 'LÉGENDAIRE',
@@ -383,30 +397,43 @@ const DEFAULT_STATE = Object.freeze({
   charScale: 100,
   charX: 0,
   charY: 0
-});
-const FIELD_IDS = Object.keys(DEFAULT_STATE);
+};
+
+const DATA_FIELDS = ['name','number','rarity','mainText','subText','gold','dark','cream','charScale','charX','charY'];
 const NUMERIC_FIELDS = ['charScale','charX','charY'];
-const state = {...DEFAULT_STATE};
+const DEFAULT_STATE = {...state};
+const DEFAULT_FILE_LABEL = 'PNG, WEBP ou JPG';
+
+let characterBlob = null;
+let backgroundBlob = null;
+let characterSourceName = '';
+let backgroundSourceName = '';
 
 function bind(){
-  ['name','number','rarity','mainText','subText','gold','dark','cream','charScale','charX','charY']
-    .forEach(id => {
-      $(id).addEventListener('input', () => {
-        if (id in state) state[id] = ['charScale','charX','charY'].includes(id) ? +$(id).value : $(id).value;
-        if (id === 'rarity') {
-          state.gold = RARITY_STYLES[state.rarity].main;
-          $('gold').value = state.gold;
-        }
-        draw();
-      });
+  DATA_FIELDS.forEach(id => {
+    $(id).addEventListener('input', () => {
+      state[id] = NUMERIC_FIELDS.includes(id) ? +$(id).value : $(id).value;
+      if (id === 'rarity') {
+        state.gold = RARITY_STYLES[state.rarity].main;
+        $('gold').value = state.gold;
+      }
+      markDirty();
+      draw();
     });
+  });
 
-  bindImagePicker('characterFile','characterFileName',(img,file)=>{character=img;characterAsset={blob:file,name:file.name};draw();});
-  bindImagePicker('bgFile','bgFileName',(img,file)=>{background=img;backgroundAsset={blob:file,name:file.name};draw();});
+  bindImagePicker('characterFile','characterFileName',(img,file)=>{
+    character=img; characterBlob=file; characterSourceName=file.name;
+    markDirty(); draw();
+  });
+  bindImagePicker('bgFile','bgFileName',(img,file)=>{
+    background=img; backgroundBlob=file; backgroundSourceName=file.name;
+    markDirty(); draw();
+  });
 
   $('downloadBtn').addEventListener('click', downloadPNG);
-  $('resetBtn').addEventListener('click', newCard);
-  $('saveBtn').addEventListener('click', saveCard);
+  $('resetBtn').addEventListener('click', () => { if(confirmDiscard()) resetEditor(); });
+  bindLibrary();
 }
 
 function bindImagePicker(inputId,nameId,onImageLoaded){
@@ -955,488 +982,537 @@ function downloadPNG(){
   a.click();
 }
 
-let characterAsset=null;
-let backgroundAsset=null;
-let currentCard=null;
-let rootHandle=null;
-let backupsDir=null;
-let libraryCards=[];
-let previewUrls=[];
-let toastTimer=null;
-const supportsFolders=typeof window.showDirectoryPicker==='function';
-const EMPTY_FILE_LABEL='PNG, WEBP ou JPG';
-const RARITY_LABELS={COMMUN:'Commun',RARE:'Rare','ÉPIQUE':'Épique','LÉGENDAIRE':'Légendaire',PRISMATIQUE:'Prismatique'};
-const ICONS={
-  edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+const ICONS = {
+  folder:'<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/>',
+  save:'<path d="M5 3h11l3 3v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M7 3v5h8V3M7 21v-7h10v7"/>',
+  cards:'<rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="9" rx="1"/><rect x="3" y="15" width="7" height="6" rx="1"/><rect x="14" y="15" width="7" height="6" rx="1"/>',
+  edit:'<path d="M4 20h4L19 9l-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/>',
   download:'<path d="M12 3v12m-5-5 5 5 5-5M4 19h16"/>',
-  trash:'<path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m5 5v6m4-6v6"/>'
+  trash:'<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/>',
+  close:'<path d="M6 6l12 12M18 6 6 18"/>',
+  refresh:'<path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  check:'<path d="m5 12 5 5 9-10"/>',
+  alert:'<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/>',
+  image:'<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8" cy="9" r="1.5"/><path d="m21 15-5-5L5 20"/>'
 };
+const HANDLE_DB = 'one-prodige-card-studio';
 
-function slugify(value){
-  return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40)||'carte';
+let projectHandle = null;
+let backupsDir = null;
+let currentCardId = null;
+let dirty = false;
+let savedCards = [];
+let toastTimer = null;
+
+function hydrateIcon(svg){
+  svg.setAttribute('viewBox','0 0 24 24');
+  svg.setAttribute('aria-hidden','true');
+  svg.innerHTML=ICONS[svg.dataset.icon]||'';
 }
 
-function fileExtension(asset){
-  const byType={'image/png':'png','image/jpeg':'jpg','image/webp':'webp'}[asset.blob.type];
-  if(byType) return byType;
-  const match=/\.(png|jpe?g|webp)$/i.exec(asset.name||'');
-  return match?match[1].toLowerCase().replace('jpeg','jpg'):'png';
+function createIcon(name){
+  const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.dataset.icon=name;
+  hydrateIcon(svg);
+  return svg;
 }
 
-async function writeFile(dir,name,blob){
-  const handle=await dir.getFileHandle(name,{create:true});
-  const writable=await handle.createWritable();
+function toast(message,type='success'){
+  const element=$('toast');
+  const manager=$('manager');
+  // A modal dialog sits in the top layer, so the toast must live inside it to stay visible.
+  const host=manager.open?manager:document.body;
+  if(element.parentElement!==host) host.append(element);
+  element.replaceChildren(createIcon(type==='error'?'alert':'check'),document.createTextNode(message));
+  element.classList.toggle('is-error',type==='error');
+  element.classList.add('is-visible');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>element.classList.remove('is-visible'),3200);
+}
+
+function markDirty(){
+  dirty=true;
+  updateEditingInfo();
+}
+
+function confirmDiscard(){
+  return !dirty || confirm('Les modifications non enregistrées seront perdues. Continuer ?');
+}
+
+function updateEditingInfo(){
+  $('editingName').textContent=currentCardId?`backups/${currentCardId}`:'Nouvelle carte';
+  $('library').classList.toggle('is-dirty',dirty);
+}
+
+function syncInputs(){
+  DATA_FIELDS.forEach(id=>{ $(id).value=state[id]; });
+}
+
+function syncImageLabels(){
+  $('characterFile').value='';
+  $('bgFile').value='';
+  $('characterFileName').textContent=characterSourceName||DEFAULT_FILE_LABEL;
+  $('bgFileName').textContent=backgroundSourceName||DEFAULT_FILE_LABEL;
+}
+
+function resetEditor(){
+  Object.assign(state,DEFAULT_STATE);
+  character=background=characterBlob=backgroundBlob=null;
+  characterSourceName=backgroundSourceName='';
+  currentCardId=null;
+  dirty=false;
+  syncInputs();
+  syncImageLabels();
+  updateEditingInfo();
+  draw();
+}
+
+function withHandleStore(mode,run){
+  return new Promise((resolve,reject)=>{
+    const request=indexedDB.open(HANDLE_DB,1);
+    request.onupgradeneeded=()=>request.result.createObjectStore('handles');
+    request.onerror=()=>reject(request.error);
+    request.onsuccess=()=>{
+      const database=request.result;
+      const transaction=database.transaction('handles',mode);
+      const operation=run(transaction.objectStore('handles'));
+      transaction.oncomplete=()=>{ database.close(); resolve(operation.result); };
+      transaction.onerror=()=>{ database.close(); reject(transaction.error); };
+    };
+  });
+}
+
+const readStoredHandle=()=>withHandleStore('readonly',store=>store.get('project')).catch(()=>null);
+const storeHandle=handle=>withHandleStore('readwrite',store=>store.put(handle,'project')).catch(()=>{});
+
+async function hasPermission(handle,request){
+  const options={mode:'readwrite'};
+  if(await handle.queryPermission(options)==='granted') return true;
+  return request && await handle.requestPermission(options)==='granted';
+}
+
+function setLibraryStatus(status,text){
+  $('library').dataset.status=status;
+  $('projectStatus').textContent=text;
+  $('connectLabel').textContent={connected:'Changer',permission:'Réactiver'}[status]||'Dossier';
+}
+
+async function hasFile(directory,name){
+  try{ await directory.getFileHandle(name); return true; }
+  catch{ return false; }
+}
+
+async function useProjectHandle(handle){
+  backupsDir=await handle.getDirectoryHandle('backups',{create:true});
+  projectHandle=handle;
+  setLibraryStatus('connected',`${handle.name}/backups`);
+  $('managerPath').textContent=`${handle.name}/backups/`;
+  await refreshCards();
+}
+
+async function connectProject(){
+  if(!('showDirectoryPicker' in window)){
+    toast('Ce navigateur ne permet pas l’accès aux dossiers. Utilise Chrome ou Edge.','error');
+    return false;
+  }
+  try{
+    if(projectHandle && !backupsDir && await hasPermission(projectHandle,true)){
+      await useProjectHandle(projectHandle);
+      toast('Dossier du projet reconnecté');
+      return true;
+    }
+    const handle=await window.showDirectoryPicker({id:'one-prodige-cards',mode:'readwrite'});
+    if(!await hasFile(handle,'index.html') && !confirm(`« ${handle.name} » ne contient pas index.html. Utiliser ce dossier quand même ?`)) return false;
+    await useProjectHandle(handle);
+    await storeHandle(handle);
+    toast(`Sauvegardes liées à ${handle.name}/backups`);
+    return true;
+  }catch(error){
+    if(error.name!=='AbortError') toast(`Connexion impossible : ${error.message}`,'error');
+    return false;
+  }
+}
+
+const readFile=async(directory,name)=>(await directory.getFileHandle(name)).getFile();
+
+async function writeFile(directory,name,blob){
+  const writable=await (await directory.getFileHandle(name,{create:true})).createWritable();
   await writable.write(blob);
   await writable.close();
 }
 
-async function readFile(dir,name){
-  return (await dir.getFileHandle(name)).getFile();
+function canvasToBlob(source,type,quality){
+  return new Promise((resolve,reject)=>source.toBlob(blob=>blob?resolve(blob):reject(new Error('export de l’image impossible')),type,quality));
 }
 
-function canvasBlob(){
-  return new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
-}
-
-function blobToImage(blob){
+function imageFromBlob(blob){
   return new Promise((resolve,reject)=>{
     const url=URL.createObjectURL(blob);
-    const img=new Image();
-    img.onload=()=>{URL.revokeObjectURL(url);resolve(img);};
-    img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Image illisible'));};
-    img.src=url;
+    const image=new Image();
+    image.onload=()=>{ URL.revokeObjectURL(url); resolve(image); };
+    image.onerror=()=>{ URL.revokeObjectURL(url); reject(new Error('image illisible')); };
+    image.src=url;
   });
 }
 
-function showToast(message,type='success'){
-  const toast=$('toast');
-  const host=$('libraryDialog').open?$('libraryDialog'):document.body;
-  if(toast.parentElement!==host) host.appendChild(toast);
-  toast.textContent=message;
-  toast.dataset.type=type;
-  toast.classList.add('is-visible');
-  clearTimeout(toastTimer);
-  toastTimer=setTimeout(()=>toast.classList.remove('is-visible'),2600);
+function imageExtension(blob,name){
+  const types={'image/png':'png','image/jpeg':'jpg','image/webp':'webp'};
+  const fromName=/\.(png|jpe?g|webp)$/i.exec(name||'')?.[1].toLowerCase().replace('jpeg','jpg');
+  return types[blob.type]||fromName||'png';
 }
 
-function openHandleStore(){
-  return new Promise((resolve,reject)=>{
-    const request=indexedDB.open('one-prodige-card-studio',1);
-    request.onupgradeneeded=()=>request.result.createObjectStore('handles');
-    request.onsuccess=()=>resolve(request.result);
-    request.onerror=()=>reject(request.error);
-  });
+function slugify(text){
+  return String(text||'carte').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40)||'carte';
 }
 
-async function storeRootHandle(handle){
-  const db=await openHandleStore();
-  await new Promise((resolve,reject)=>{
-    const transaction=db.transaction('handles','readwrite');
-    transaction.objectStore('handles').put(handle,'root');
-    transaction.oncomplete=resolve;
-    transaction.onerror=()=>reject(transaction.error);
-  });
-  db.close();
-}
-
-async function readRootHandle(){
-  const db=await openHandleStore();
-  const handle=await new Promise((resolve,reject)=>{
-    const request=db.transaction('handles').objectStore('handles').get('root');
-    request.onsuccess=()=>resolve(request.result);
-    request.onerror=()=>reject(request.error);
-  });
-  db.close();
-  return handle;
-}
-
-function folderLabel(){
-  if(!rootHandle) return '';
-  if(backupsDir===rootHandle||!rootHandle.name) return 'backups';
-  return `${rootHandle.name}/backups`;
-}
-
-async function useRoot(handle){
-  rootHandle=handle;
-  backupsDir=handle.name.toLowerCase()==='backups'?handle:await handle.getDirectoryHandle('backups',{create:true});
-  updateStatus();
-  await refreshLibrary();
-}
-
-async function connectFolder(){
-  if(!supportsFolders){
-    showToast('Sauvegarde disponible uniquement dans Chrome ou Edge','error');
-    return false;
-  }
-  try{
-    const picked=await window.showDirectoryPicker({id:'one-prodige-cards',mode:'readwrite'});
-    await useRoot(picked);
-    await storeRootHandle(picked);
-    showToast(`Dossier connecté : ${folderLabel()}`);
-    return true;
-  }catch(error){
-    if(error.name!=='AbortError') showToast('Accès au dossier impossible','error');
-    return false;
-  }
-}
-
-async function ensureFolder(){
-  if(backupsDir) return true;
-  if(rootHandle){
-    try{
-      if(await rootHandle.requestPermission({mode:'readwrite'})==='granted'){
-        await useRoot(rootHandle);
-        return true;
-      }
-    }catch{}
-  }
-  return connectFolder();
-}
-
-async function restoreFolder(){
-  if(!supportsFolders){updateStatus();renderLibrary();return;}
-  try{
-    const handle=await readRootHandle();
-    if(handle){
-      rootHandle=handle;
-      if(await handle.queryPermission({mode:'readwrite'})==='granted') await useRoot(handle);
-    }
-  }catch{}
-  updateStatus();
-  renderLibrary();
-}
-
-function updateStatus(){
-  const status=$('saveStatus');
-  const cardText=currentCard?`Modification de « ${currentCard.data.fields.name||'Sans nom'} »`:'Nouvelle carte non enregistrée';
-  status.firstElementChild.textContent=`${cardText} · ${backupsDir?folderLabel():'aucun dossier'}`;
-  status.dataset.state=currentCard?'saved':'draft';
-  $('libraryFolder').textContent=!supportsFolders
-    ?'Navigateur non compatible : ouvre ce fichier dans Chrome ou Edge.'
-    :backupsDir?`Dossier : ${folderLabel()}`:rootHandle?`Autorisation requise pour « ${rootHandle.name} »`:'Aucun dossier connecté';
-  const connect=$('connectFolderBtn');
-  connect.disabled=!supportsFolders;
-  connect.lastElementChild.textContent=backupsDir?'Changer de dossier':rootHandle?'Autoriser l’accès':'Choisir le dossier';
-}
-
-function syncInputs(){
-  for(const id of FIELD_IDS) $(id).value=state[id];
-  $('characterFile').value='';
-  $('bgFile').value='';
-  $('characterFileName').textContent=characterAsset?.name||EMPTY_FILE_LABEL;
-  $('bgFileName').textContent=backgroundAsset?.name||EMPTY_FILE_LABEL;
-}
-
-function newCard(){
-  Object.assign(state,DEFAULT_STATE);
-  character=null;
-  background=null;
-  characterAsset=null;
-  backgroundAsset=null;
-  currentCard=null;
-  syncInputs();
-  draw();
-  updateStatus();
-  renderLibrary();
-  showToast('Nouvelle carte prête');
-}
-
-function setSaving(isSaving){
-  $('saveBtn').disabled=isSaving;
-  $('saveLabel').textContent=isSaving?'Enregistrement…':'Enregistrer';
-}
-
-async function saveCard(){
-  if($('saveBtn').disabled||!(await ensureFolder())) return;
-  setSaving(true);
-  try{
-    const now=new Date().toISOString();
-    const previous=currentCard?.data||null;
-    let folder=currentCard?.folder||null;
-    let dir=null;
-    if(folder){
-      try{dir=await backupsDir.getDirectoryHandle(folder);}catch{folder=null;}
-    }
-    if(!folder){
-      folder=`${slugify(state.name)}-${Date.now().toString(36)}`;
-      dir=await backupsDir.getDirectoryHandle(folder,{create:true});
-    }
-
-    const files={render:null,background:null,preview:'preview.png'};
-    if(characterAsset){
-      files.render=`render.${fileExtension(characterAsset)}`;
-      await writeFile(dir,files.render,characterAsset.blob);
-    }
-    if(backgroundAsset){
-      files.background=`fond.${fileExtension(backgroundAsset)}`;
-      await writeFile(dir,files.background,backgroundAsset.blob);
-    }
-    for(const key of ['render','background']){
-      const oldName=previous?.files?.[key];
-      if(oldName&&oldName!==files[key]) await dir.removeEntry(oldName).catch(()=>{});
-    }
-    await writeFile(dir,files.preview,await canvasBlob());
-
-    const data={
-      app:'one-prodige-card-studio',
-      version:1,
-      createdAt:previous?.createdAt||now,
-      updatedAt:now,
-      fields:{...state},
-      files,
-      sources:{render:characterAsset?.name||null,background:backgroundAsset?.name||null}
-    };
-    await writeFile(dir,'card.json',new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
-    currentCard={folder,data};
-    await refreshLibrary();
-    updateStatus();
-    showToast(previous?'Carte mise à jour':`Carte enregistrée dans backups/${folder}`);
-  }catch{
-    showToast('Échec de l’enregistrement','error');
-  }finally{
-    setSaving(false);
-  }
-}
-
-let refreshToken=0;
-async function refreshLibrary(){
-  const token=++refreshToken;
-  const urls=[];
-  const cards=[];
-  if(backupsDir){
-    try{
-      for await(const handle of backupsDir.values()){
-        if(handle.kind!=='directory') continue;
-        try{
-          const data=JSON.parse(await (await readFile(handle,'card.json')).text());
-          if(!data?.fields) continue;
-          let preview=null;
-          try{
-            preview=URL.createObjectURL(await readFile(handle,data.files?.preview||'preview.png'));
-            urls.push(preview);
-          }catch{}
-          cards.push({folder:handle.name,dir:handle,data,preview});
-        }catch{}
-      }
-    }catch{
-      showToast('Lecture du dossier impossible','error');
-    }
-  }
-  // A newer refresh started meanwhile: drop this result.
-  if(token!==refreshToken){
-    urls.forEach(url=>URL.revokeObjectURL(url));
-    return;
-  }
-  previewUrls.forEach(url=>URL.revokeObjectURL(url));
-  previewUrls=urls;
-  cards.sort((a,b)=>String(b.data.updatedAt||'').localeCompare(String(a.data.updatedAt||'')));
-  libraryCards=cards;
-  renderLibrary();
+function downloadBlob(blob,filename){
+  const url=URL.createObjectURL(blob);
+  const link=document.createElement('a');
+  link.href=url;
+  link.download=filename;
+  link.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
 function formatDate(value){
   const date=new Date(value);
-  if(Number.isNaN(date.getTime())) return '';
-  return new Intl.DateTimeFormat('fr-FR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}).format(date);
+  return Number.isNaN(date.getTime())?'—':date.toLocaleString('fr-FR',{dateStyle:'short',timeStyle:'short'});
 }
 
-function iconButton(iconName,label,className=''){
-  const button=document.createElement('button');
-  button.type='button';
-  button.className=className;
-  button.title=label;
-  button.setAttribute('aria-label',label);
-  button.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[iconName]}</svg>`;
-  return button;
+function rarityLabel(value){
+  return [...$('rarity').options].find(option=>option.value===value)?.textContent||value||'';
+}
+
+function createThumbnail(){
+  const thumbnail=document.createElement('canvas');
+  thumbnail.width=360;
+  thumbnail.height=504;
+  const context=thumbnail.getContext('2d');
+  context.imageSmoothingQuality='high';
+  context.drawImage(canvas,0,0,thumbnail.width,thumbnail.height);
+  return canvasToBlob(thumbnail,'image/webp',.9);
+}
+
+async function saveCard(){
+  if(!backupsDir && !await connectProject()) return;
+  const button=$('saveBtn');
+  button.disabled=true;
+  try{
+    const now=new Date().toISOString();
+    const isNew=!currentCardId;
+    const id=currentCardId||`${slugify(state.name)}-${Date.now().toString(36)}`;
+    const directory=await backupsDir.getDirectoryHandle(id,{create:true});
+    let createdAt=now;
+    try{ createdAt=JSON.parse(await (await readFile(directory,'card.json')).text()).createdAt||now; }catch{}
+
+    const files={card:'card.png',thumbnail:'thumbnail.webp'};
+    if(characterBlob) files.render=`render.${imageExtension(characterBlob,characterSourceName)}`;
+    if(backgroundBlob) files.background=`background.${imageExtension(backgroundBlob,backgroundSourceName)}`;
+
+    const staleFiles=[];
+    for await(const [name,handle] of directory.entries()){
+      if(handle.kind==='file' && /^(render|background)\./.test(name) && !Object.values(files).includes(name)) staleFiles.push(name);
+    }
+    await Promise.all(staleFiles.map(name=>directory.removeEntry(name)));
+
+    if(characterBlob) await writeFile(directory,files.render,characterBlob);
+    if(backgroundBlob) await writeFile(directory,files.background,backgroundBlob);
+    await writeFile(directory,files.card,await canvasToBlob(canvas,'image/png'));
+    await writeFile(directory,files.thumbnail,await createThumbnail());
+    const record={
+      version:1,
+      id,
+      createdAt,
+      updatedAt:now,
+      data:Object.fromEntries(DATA_FIELDS.map(key=>[key,state[key]])),
+      files,
+      sources:{render:characterSourceName||null,background:backgroundSourceName||null}
+    };
+    await writeFile(directory,'card.json',new Blob([JSON.stringify(record,null,2)],{type:'application/json'}));
+
+    currentCardId=id;
+    dirty=false;
+    updateEditingInfo();
+    toast(isNew?`Carte enregistrée dans backups/${id}`:'Modifications enregistrées');
+    await refreshCards();
+  }catch(error){
+    toast(`Enregistrement impossible : ${error.message}`,'error');
+  }finally{
+    button.disabled=false;
+  }
+}
+
+async function refreshCards(){
+  for(const card of savedCards) if(card.thumb) URL.revokeObjectURL(card.thumb);
+  const cards=[];
+  if(backupsDir){
+    for await(const [name,handle] of backupsDir.entries()){
+      if(handle.kind!=='directory') continue;
+      try{
+        const meta=JSON.parse(await (await readFile(handle,'card.json')).text());
+        let thumb='';
+        try{ thumb=URL.createObjectURL(await readFile(handle,meta.files?.thumbnail||'thumbnail.webp')); }catch{}
+        cards.push({id:name,dir:handle,meta,thumb});
+      }catch{}
+    }
+  }
+  cards.sort((first,second)=>String(second.meta.updatedAt||'').localeCompare(String(first.meta.updatedAt||'')));
+  savedCards=cards;
+  $('cardCount').textContent=cards.length;
+  renderCards();
+}
+
+function showEmpty(iconName,title,text,action){
+  const heading=document.createElement('strong');
+  heading.textContent=title;
+  const body=document.createElement('p');
+  body.textContent=text;
+  const empty=$('emptyState');
+  empty.replaceChildren(createIcon(iconName),heading,body);
+  if(action){
+    const button=document.createElement('button');
+    button.type='button';
+    button.className='accent';
+    button.append(createIcon(action.icon),document.createTextNode(action.label));
+    button.addEventListener('click',action.run);
+    empty.append(button);
+  }
+  empty.hidden=false;
+  $('cardGrid').hidden=true;
+}
+
+function renderCards(){
+  const grid=$('cardGrid');
+  grid.replaceChildren();
+  if(!backupsDir){
+    showEmpty('folder','Aucun dossier connecté','Choisis le dossier du projet : un dossier backups/ y sera créé pour ranger chaque carte.',{
+      icon:'folder',
+      label:projectHandle?'Réactiver l’accès':'Choisir le dossier',
+      run:connectProject
+    });
+    return;
+  }
+  if(!savedCards.length){
+    showEmpty('cards','Aucune carte enregistrée','Crée une carte puis clique sur Enregistrer pour la retrouver ici.');
+    return;
+  }
+  const query=$('cardSearch').value.trim().toLowerCase();
+  const visible=savedCards.filter(card=>{
+    const data=card.meta.data||{};
+    return !query||`${data.name||''} ${rarityLabel(data.rarity)} ${data.number||''} ${card.id}`.toLowerCase().includes(query);
+  });
+  if(!visible.length){
+    showEmpty('search','Aucun résultat',`Aucune carte ne correspond à « ${query} ».`);
+    return;
+  }
+  $('emptyState').hidden=true;
+  grid.hidden=false;
+  visible.forEach(card=>grid.append(createCardItem(card)));
 }
 
 function createCardItem(card){
-  const fields=card.data.fields;
-  const name=fields.name||'Sans nom';
+  const data=card.meta.data||{};
+  const name=data.name||card.id;
   const item=document.createElement('article');
-  item.className='cardItem';
-  if(currentCard?.folder===card.folder) item.classList.add('is-current');
+  item.className='savedCard';
+  item.classList.toggle('is-current',card.id===currentCardId);
 
-  const thumb=document.createElement('button');
-  thumb.type='button';
-  thumb.className='cardThumb';
-  thumb.setAttribute('aria-label',`Modifier ${name}`);
-  if(card.preview){
-    const img=document.createElement('img');
-    img.src=card.preview;
-    img.alt='';
-    img.loading='lazy';
-    thumb.append(img);
-  }
-  thumb.addEventListener('click',()=>openCard(card));
+  const preview=document.createElement('button');
+  preview.type='button';
+  preview.className='savedPreview';
+  preview.title='Ouvrir dans l’éditeur';
+  if(card.thumb){
+    const image=document.createElement('img');
+    image.src=card.thumb;
+    image.alt=`Aperçu de ${name}`;
+    preview.append(image);
+  }else preview.append(createIcon('image'));
+  preview.addEventListener('click',()=>openCard(card));
 
-  const info=document.createElement('div');
-  info.className='cardInfo';
-  const title=document.createElement('strong');
-  title.textContent=name;
   const meta=document.createElement('div');
-  meta.className='cardMeta';
-  const chip=document.createElement('span');
-  chip.className='rarityChip';
-  chip.style.setProperty('--chip',RARITY_STYLES[fields.rarity]?.main||'#d9b23f');
-  chip.textContent=RARITY_LABELS[fields.rarity]||'Carte';
+  meta.className='savedMeta';
+  const title=document.createElement('strong');
+  title.className='savedName';
+  title.textContent=name;
+  const info=document.createElement('span');
+  info.className='savedInfo';
+  const dot=document.createElement('i');
+  dot.className='rarityDot';
+  dot.style.background=RARITY_STYLES[data.rarity]?.main||'#777';
+  info.append(dot,document.createTextNode(`${rarityLabel(data.rarity)}${data.number?` · N° ${data.number}`:''}`));
   const date=document.createElement('span');
-  date.className='cardDate';
-  date.textContent=formatDate(card.data.updatedAt);
-  meta.append(chip,date);
-  info.append(title,meta);
+  date.className='savedDate';
+  date.textContent=`Modifiée le ${formatDate(card.meta.updatedAt)}`;
+  meta.append(title,info,date);
+
+  const edit=document.createElement('button');
+  edit.type='button';
+  edit.title='Ouvrir et modifier';
+  edit.append(createIcon('edit'),document.createTextNode('Modifier'));
+  edit.addEventListener('click',()=>openCard(card));
+
+  const download=document.createElement('button');
+  download.type='button';
+  download.className='iconBtn';
+  download.title='Télécharger le PNG';
+  download.setAttribute('aria-label',`Télécharger le PNG de ${name}`);
+  download.append(createIcon('download'));
+  download.addEventListener('click',()=>downloadSavedCard(card));
+
+  const remove=document.createElement('button');
+  remove.type='button';
+  remove.className='iconBtn danger';
+  remove.title='Supprimer';
+  remove.setAttribute('aria-label',`Supprimer ${name}`);
+  const confirmText=document.createElement('span');
+  confirmText.textContent='Confirmer';
+  confirmText.hidden=true;
+  remove.append(createIcon('trash'),confirmText);
+  let confirmTimer=null;
+  remove.addEventListener('click',()=>{
+    if(!remove.classList.contains('is-confirming')){
+      remove.classList.add('is-confirming');
+      confirmText.hidden=false;
+      confirmTimer=setTimeout(()=>{ remove.classList.remove('is-confirming'); confirmText.hidden=true; },3000);
+      return;
+    }
+    clearTimeout(confirmTimer);
+    deleteCard(card);
+  });
 
   const actions=document.createElement('div');
-  actions.className='cardActions';
-  const edit=iconButton('edit','Modifier la carte','grow');
-  edit.append('Modifier');
-  edit.addEventListener('click',()=>openCard(card));
-  const png=iconButton('download','Télécharger le PNG');
-  png.addEventListener('click',()=>downloadSavedPng(card));
-  const remove=iconButton('trash','Supprimer la carte','danger');
-  const confirmText=document.createElement('span');
-  confirmText.className='confirmText';
-  confirmText.textContent='Confirmer';
-  remove.append(confirmText);
-  remove.addEventListener('click',()=>deleteCard(card,remove));
-  actions.append(edit,png,remove);
-
-  item.append(thumb,info,actions);
+  actions.className='savedActions';
+  actions.append(edit,download,remove);
+  item.append(preview,meta,actions);
   return item;
 }
 
-function renderLibrary(){
-  const query=$('librarySearch').value.trim().toLowerCase();
-  const visible=libraryCards.filter(card=>{
-    const fields=card.data.fields;
-    return !query||`${fields.name} ${fields.number} ${RARITY_LABELS[fields.rarity]||''}`.toLowerCase().includes(query);
-  });
-  const grid=$('libraryGrid');
-  grid.replaceChildren(...visible.map(createCardItem));
-  const count=libraryCards.length;
-  $('libraryCount').textContent=`${count} carte${count>1?'s':''}`;
-  $('libraryCountBadge').textContent=count?String(count):'';
-
-  const isEmpty=visible.length===0;
-  grid.hidden=isEmpty;
-  $('libraryEmpty').classList.toggle('is-visible',isEmpty);
-  if(!backupsDir){
-    $('libraryEmptyTitle').textContent='Aucun dossier connecté';
-    $('libraryEmptyText').textContent=supportsFolders
-      ?'Choisis un dossier : le sous-dossier « backups » y sera créé, ou réutilisé s’il existe déjà.'
-      :'La sauvegarde sur le disque nécessite Chrome ou Edge.';
-  }else if(!count){
-    $('libraryEmptyTitle').textContent='Aucune carte enregistrée';
-    $('libraryEmptyText').textContent='Crée une carte puis clique sur Enregistrer.';
-  }else{
-    $('libraryEmptyTitle').textContent='Aucun résultat';
-    $('libraryEmptyText').textContent='Aucune carte ne correspond à cette recherche.';
-  }
+async function readImageCopy(directory,name){
+  // Copy into memory: overwriting the saved file later would invalidate the File snapshot.
+  const file=await readFile(directory,name);
+  return new Blob([await file.arrayBuffer()],{type:file.type});
 }
 
 async function openCard(card){
+  if(!confirmDiscard()) return;
   try{
-    const fields=card.data.fields||{};
-    const next={...DEFAULT_STATE};
-    for(const key of FIELD_IDS){
-      if(fields[key]===undefined||fields[key]===null) continue;
-      next[key]=NUMERIC_FIELDS.includes(key)?(Number(fields[key])||0):String(fields[key]);
-    }
-    if(!RARITY_STYLES[next.rarity]) next.rarity=DEFAULT_STATE.rarity;
-    for(const key of ['gold','dark','cream']){
-      if(!/^#[0-9a-f]{6}$/i.test(next[key])) next[key]=DEFAULT_STATE[key];
-    }
+    const data=card.meta.data||{};
+    const files=card.meta.files||{};
+    const nextState={...DEFAULT_STATE};
+    DATA_FIELDS.forEach(key=>{
+      if(!(key in data)) return;
+      if(NUMERIC_FIELDS.includes(key)){
+        const value=Number(data[key]);
+        if(Number.isFinite(value)) nextState[key]=value;
+      }else nextState[key]=String(data[key]);
+    });
+    if(!RARITY_STYLES[nextState.rarity]) nextState.rarity=DEFAULT_STATE.rarity;
 
-    const files=card.data.files||{};
-    const sources=card.data.sources||{};
-    let nextCharacter=null,nextCharacterAsset=null,nextBackground=null,nextBackgroundAsset=null;
-    if(files.render){
-      const file=await readFile(card.dir,files.render);
-      nextCharacter=await blobToImage(file);
-      nextCharacterAsset={blob:file,name:sources.render||file.name};
-    }
-    if(files.background){
-      const file=await readFile(card.dir,files.background);
-      nextBackground=await blobToImage(file);
-      nextBackgroundAsset={blob:file,name:sources.background||file.name};
-    }
+    const renderBlob=files.render?await readImageCopy(card.dir,files.render):null;
+    const backgroundFile=files.background?await readImageCopy(card.dir,files.background):null;
+    const [renderImage,backgroundImage]=await Promise.all([
+      renderBlob&&imageFromBlob(renderBlob),
+      backgroundFile&&imageFromBlob(backgroundFile)
+    ]);
 
-    Object.assign(state,next);
-    character=nextCharacter;
-    characterAsset=nextCharacterAsset;
-    background=nextBackground;
-    backgroundAsset=nextBackgroundAsset;
-    currentCard={folder:card.folder,data:card.data};
+    Object.assign(state,nextState);
+    character=renderImage;
+    background=backgroundImage;
+    characterBlob=renderBlob;
+    backgroundBlob=backgroundFile;
+    characterSourceName=renderBlob?String(card.meta.sources?.render||files.render):'';
+    backgroundSourceName=backgroundFile?String(card.meta.sources?.background||files.background):'';
+    currentCardId=card.id;
+    dirty=false;
     syncInputs();
+    syncImageLabels();
+    updateEditingInfo();
     draw();
-    updateStatus();
-    renderLibrary();
-    $('libraryDialog').close();
-    showToast(`« ${state.name||'Sans nom'} » prête à être modifiée`);
-  }catch{
-    showToast('Impossible d’ouvrir cette carte','error');
+    $('manager').close();
+    toast(`« ${state.name} » ouverte dans l’éditeur`);
+  }catch(error){
+    toast(`Ouverture impossible : ${error.message}`,'error');
   }
 }
 
-async function downloadSavedPng(card){
+async function deleteCard(card){
   try{
-    const file=await readFile(card.dir,card.data.files?.preview||'preview.png');
-    const url=URL.createObjectURL(file);
-    const link=document.createElement('a');
-    link.href=url;
-    link.download=`${slugify(card.data.fields.name)}.png`;
-    link.click();
-    setTimeout(()=>URL.revokeObjectURL(url),1000);
-    showToast('PNG téléchargé');
-  }catch{
-    showToast('Aperçu PNG introuvable','error');
+    await backupsDir.removeEntry(card.id,{recursive:true});
+    if(card.id===currentCardId){
+      currentCardId=null;
+      markDirty();
+    }
+    toast(`« ${card.meta.data?.name||card.id} » supprimée`);
+    await refreshCards();
+  }catch(error){
+    toast(`Suppression impossible : ${error.message}`,'error');
   }
 }
 
-async function deleteCard(card,button){
-  if(!button.classList.contains('is-confirm')){
-    button.classList.add('is-confirm');
-    button.setAttribute('aria-label','Confirmer la suppression');
-    setTimeout(()=>{
-      button.classList.remove('is-confirm');
-      button.setAttribute('aria-label','Supprimer la carte');
-    },3000);
-    return;
-  }
+async function downloadSavedCard(card){
   try{
-    await backupsDir.removeEntry(card.folder,{recursive:true});
-    if(currentCard?.folder===card.folder) currentCard=null;
-    await refreshLibrary();
-    updateStatus();
-    showToast('Carte supprimée');
-  }catch{
-    showToast('Suppression impossible','error');
+    downloadBlob(await readFile(card.dir,card.meta.files?.card||'card.png'),`${slugify(card.meta.data?.name)}.png`);
+    toast('PNG téléchargé');
+  }catch(error){
+    toast(`PNG introuvable : ${error.message}`,'error');
   }
 }
 
-function initLibrary(){
-  const dialog=$('libraryDialog');
-  $('openLibraryBtn').addEventListener('click',()=>{
-    dialog.showModal();
-    if(backupsDir) refreshLibrary();
-    else renderLibrary();
+function bindLibrary(){
+  document.querySelectorAll('svg[data-icon]').forEach(hydrateIcon);
+  const manager=$('manager');
+  $('connectBtn').addEventListener('click',connectProject);
+  $('saveBtn').addEventListener('click',saveCard);
+  $('managerBtn').addEventListener('click',async()=>{
+    manager.showModal();
+    renderCards();
+    if(backupsDir) await refreshCards();
   });
-  $('closeLibraryBtn').addEventListener('click',()=>dialog.close());
-  dialog.addEventListener('click',event=>{if(event.target===dialog) dialog.close();});
-  $('connectFolderBtn').addEventListener('click',()=>rootHandle&&!backupsDir?ensureFolder():connectFolder());
-  $('librarySearch').addEventListener('input',renderLibrary);
+  $('closeManagerBtn').addEventListener('click',()=>manager.close());
+  $('refreshBtn').addEventListener('click',async()=>{
+    await refreshCards();
+    toast('Liste actualisée');
+  });
+  $('newCardBtn').addEventListener('click',()=>{
+    if(!confirmDiscard()) return;
+    resetEditor();
+    manager.close();
+    toast('Nouvelle carte prête');
+  });
+  $('cardSearch').addEventListener('input',renderCards);
+  manager.addEventListener('click',event=>{ if(event.target===manager) manager.close(); });
   document.addEventListener('keydown',event=>{
     if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='s'){
       event.preventDefault();
       saveCard();
     }
   });
-  restoreFolder();
+}
+
+async function initLibrary(){
+  updateEditingInfo();
+  if(!('showDirectoryPicker' in window)){
+    setLibraryStatus('unsupported','Navigateur non compatible : utilise Chrome ou Edge');
+    $('connectBtn').disabled=true;
+    $('saveBtn').disabled=true;
+    return;
+  }
+  const stored=await readStoredHandle();
+  if(!stored) return;
+  projectHandle=stored;
+  try{
+    if(await hasPermission(stored,false)) await useProjectHandle(stored);
+    else setLibraryStatus('permission',`${stored.name} : accès à réactiver`);
+  }catch{
+    setLibraryStatus('permission',`${stored.name} : accès à réactiver`);
+  }
 }
 
 bind();
-initLibrary();
 draw();
+initLibrary();
 </script>
 </body>
 </html>
