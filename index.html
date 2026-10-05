@@ -85,6 +85,7 @@
   .fileDrop{display:flex;align-items:center;gap:10px;min-height:58px;padding:9px 11px;border:1px dashed #635632;border-radius:6px;background:linear-gradient(110deg,rgba(217,178,63,.07),rgba(16,17,19,.86));cursor:pointer;transition:border-color .16s ease,background-color .16s ease}
   .fileDrop:hover{border-color:#d9b23f;background-color:rgba(217,178,63,.08)}
   .fileInput:focus-visible+.fileDrop{outline:2px solid #d9b23f;outline-offset:2px}
+  .filePicker.is-dragging .fileDrop{border-style:solid;border-color:#f0d987;background:linear-gradient(110deg,rgba(217,178,63,.2),rgba(16,17,19,.9));box-shadow:0 0 0 3px rgba(217,178,63,.12)}
   .fileDrop svg{width:19px;height:19px;flex:none;fill:none;stroke:#e2c66c;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
   .fileMeta{min-width:0;flex:1}
   .fileTitle{display:block;color:#f1e4b6;font-size:11px;font-weight:700}
@@ -315,19 +316,46 @@ function bind(){
       });
     });
 
-  $('characterFile').addEventListener('change', e => {
-    const file=e.target.files[0];
-    $('characterFileName').textContent=file?.name||'PNG, WEBP ou JPG';
-    loadImageFile(file,img=>{character=img;draw();});
-  });
-  $('bgFile').addEventListener('change', e => {
-    const file=e.target.files[0];
-    $('bgFileName').textContent=file?.name||'PNG, WEBP ou JPG';
-    loadImageFile(file,img=>{background=img;draw();});
-  });
+  bindImagePicker('characterFile','characterFileName',img=>{character=img;draw();});
+  bindImagePicker('bgFile','bgFileName',img=>{background=img;draw();});
 
   $('downloadBtn').addEventListener('click', downloadPNG);
   $('resetBtn').addEventListener('click', () => location.reload());
+}
+
+function bindImagePicker(inputId,nameId,onImageLoaded){
+  const input=$(inputId);
+  const name=$(nameId);
+  const picker=input.closest('.filePicker');
+  const loadFile=file=>{
+    if(!file) return;
+    const supported=file.type.startsWith('image/')||/\.(png|jpe?g|webp)$/i.test(file.name);
+    if(!supported) return;
+    name.textContent=file.name;
+    loadImageFile(file,onImageLoaded);
+  };
+
+  input.addEventListener('change',event=>loadFile(event.target.files[0]));
+  picker.addEventListener('dragenter',event=>{
+    event.preventDefault();
+    picker.classList.add('is-dragging');
+  });
+  picker.addEventListener('dragover',event=>{
+    event.preventDefault();
+    event.dataTransfer.dropEffect='copy';
+    picker.classList.add('is-dragging');
+  });
+  picker.addEventListener('dragleave',event=>{
+    if(!picker.contains(event.relatedTarget)) picker.classList.remove('is-dragging');
+  });
+  picker.addEventListener('drop',event=>{
+    event.preventDefault();
+    picker.classList.remove('is-dragging');
+    const file=[...event.dataTransfer.files].find(candidate=>candidate.type.startsWith('image/')||/\.(png|jpe?g|webp)$/i.test(candidate.name));
+    if(!file) return;
+    input.value='';
+    loadFile(file);
+  });
 }
 
 function loadImageFile(file, cb){
