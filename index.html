@@ -92,7 +92,7 @@
   .fileName{display:block;overflow:hidden;margin-top:3px;color:#999a9c;font-size:9px;text-overflow:ellipsis;white-space:nowrap}
   input[type="range"]{padding:0;accent-color:#d9b23f;cursor:pointer}
   .hint{font-size:10px;color:#96989b;margin-top:6px;line-height:1.45}
-  .buttons{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.4fr);gap:8px;margin:0}
+  .buttons{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1fr) minmax(0,1.2fr);gap:8px;margin:0}
   .panelActions{position:sticky;bottom:-1px;z-index:3;margin:14px -18px 0;padding:12px 18px 14px;border-top:1px solid rgba(217,178,63,.18);background:linear-gradient(180deg,rgba(19,20,22,.94),#121315 35%);backdrop-filter:blur(10px)}
   button{
     display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;
@@ -109,6 +109,57 @@
   .tiny{font-size:9px;color:#8d9199;line-height:1.4;margin-top:8px}
   .sectionTitle{display:flex;align-items:center;gap:9px;margin-top:14px;padding-top:11px;border-top:1px solid rgba(217,178,63,.16);color:#d9b23f;font-size:10px;font-weight:800;letter-spacing:.13em;text-transform:uppercase}
   .sectionTitle svg{width:16px;height:16px;flex:none;padding:2px;border:1px solid rgba(217,178,63,.22);border-radius:4px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  button:disabled{opacity:.55;cursor:progress;filter:none}
+  .headerTools{display:flex;align-items:center;gap:8px;flex:none}
+  .iconBtn{position:relative;width:42px;min-width:42px;height:42px;min-height:42px;padding:0;border-color:rgba(217,178,63,.3);background:#17181b;color:#f4d77b}
+  .iconBtn svg{width:17px;height:17px}
+  .countBadge{position:absolute;top:-7px;right:-7px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#d9b23f;color:#17120a;font-size:9px;font-weight:800;line-height:18px;text-align:center}
+  .countBadge:empty{display:none}
+  .saveStatus{display:flex;align-items:center;gap:7px;min-width:0;margin-bottom:10px;color:#a8abb2;font-size:10px;line-height:1.35}
+  .saveStatus::before{content:'';flex:none;width:7px;height:7px;border-radius:50%;background:#5c5f66}
+  .saveStatus[data-state="saved"]::before{background:#d9b23f;box-shadow:0 0 8px rgba(217,178,63,.6)}
+  .saveStatus span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  dialog.library{width:min(980px,calc(100vw - 32px));max-height:calc(100vh - 48px);padding:0;border:1px solid rgba(217,178,63,.25);border-radius:12px;background:linear-gradient(165deg,#1b1c1f,#0f1012);color:#fff;box-shadow:0 30px 90px #000c;overflow:hidden}
+  dialog.library[open]{display:flex;flex-direction:column}
+  dialog.library::backdrop{background:rgba(5,4,3,.74);backdrop-filter:blur(4px)}
+  .libraryHead{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px 22px 16px;border-bottom:1px solid rgba(217,178,63,.18)}
+  .libraryHead h2{margin:0;font-family:Georgia,serif;font-size:22px;color:#f8f3e8}
+  .libraryFolder{margin:6px 0 0;color:#d7d9dd;font-size:11px}
+  .libraryHint{margin:4px 0 0;color:#8d9199;font-size:10px}
+  .libraryTools{display:flex;gap:8px;flex:none}
+  .libraryBar{display:flex;align-items:center;gap:12px;padding:14px 22px}
+  .search{position:relative;display:block;flex:1;margin:0}
+  .search svg{position:absolute;left:11px;top:50%;width:15px;height:15px;transform:translateY(-50%);fill:none;stroke:#8d9199;stroke-width:1.8;stroke-linecap:round}
+  .search input{padding-left:34px}
+  .libraryCount{flex:none;color:#8d9199;font-size:11px}
+  .libraryGrid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));align-content:start;gap:14px;padding:4px 22px 22px;overflow-y:auto}
+  .libraryGrid[hidden]{display:none}
+  .cardItem{display:flex;flex-direction:column;min-width:0;border:1px solid #2e3035;border-radius:8px;background:#141518;overflow:hidden;transition:border-color .16s ease,transform .16s ease}
+  .cardItem:hover{border-color:rgba(217,178,63,.45);transform:translateY(-2px)}
+  .cardItem.is-current{border-color:#d9b23f;box-shadow:0 0 0 1px rgba(217,178,63,.4)}
+  .cardThumb{display:block;width:100%;aspect-ratio:5/7;min-height:0;padding:0;border:0;border-radius:0;background:#0b0b0c}
+  .cardThumb img{display:block;width:100%;height:100%;object-fit:cover}
+  .cardInfo{display:grid;gap:6px;min-width:0;padding:10px 11px 8px}
+  .cardInfo strong{overflow:hidden;color:#f8f3e8;font-family:Georgia,serif;font-size:14px;text-overflow:ellipsis;white-space:nowrap}
+  .cardMeta{display:flex;align-items:center;justify-content:space-between;gap:6px;min-width:0}
+  .rarityChip{padding:2px 7px;border:1px solid var(--chip);border-radius:20px;color:var(--chip);font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;white-space:nowrap}
+  .cardDate{color:#8d9199;font-size:9px;white-space:nowrap}
+  .cardActions{display:flex;gap:6px;padding:0 11px 11px}
+  .cardActions button{width:34px;min-width:34px;min-height:34px;padding:6px;background:#1c1d21;font-size:10px}
+  .cardActions .grow{flex:1;width:auto}
+  .cardActions button svg{width:14px;height:14px}
+  .cardActions .danger:hover,.cardActions .danger.is-confirm{border-color:#b6483b;background:#3a1714;color:#ffb3a8}
+  .cardActions .danger.is-confirm{width:auto;padding:6px 9px}
+  .confirmText{display:none}
+  .danger.is-confirm .confirmText{display:inline}
+  .danger.is-confirm svg{display:none}
+  .libraryEmpty{display:none;flex-direction:column;align-items:center;gap:10px;padding:48px 22px 56px;color:#a8abb2;font-size:12px;text-align:center}
+  .libraryEmpty.is-visible{display:flex}
+  .libraryEmpty svg{width:34px;height:34px;fill:none;stroke:#d9b23f;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+  .libraryEmpty strong{color:#f1e4b6;font-size:14px}
+  .toast{position:fixed;left:50%;bottom:24px;z-index:20;max-width:calc(100vw - 32px);padding:11px 16px;border:1px solid rgba(217,178,63,.45);border-radius:6px;background:#17181b;color:#f8f3e8;font-size:12px;box-shadow:0 12px 30px #000a;opacity:0;pointer-events:none;transform:translate(-50%,12px);transition:opacity .2s ease,transform .2s ease}
+  .toast.is-visible{opacity:1;transform:translate(-50%,0)}
+  .toast[data-type="error"]{border-color:#b6483b;color:#ffcbc3}
   .stage{
     min-height:calc(100vh - 44px);
     display:flex;align-items:center;justify-content:center;
@@ -140,7 +191,10 @@
         <div class="eyebrow">ONE PRODIGE · CARD STUDIO</div>
         <h1>Gold Card Generator</h1>
       </div>
-      <div class="formatBadge"><span>5:7</span><span>HD</span></div>
+      <div class="headerTools">
+        <button id="openLibraryBtn" class="iconBtn" type="button" title="Bibliothèque de cartes" aria-label="Ouvrir la bibliothèque de cartes"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="12" height="15" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v13"/></svg><span id="libraryCountBadge" class="countBadge"></span></button>
+        <div class="formatBadge"><span>5:7</span><span>HD</span></div>
+      </div>
     </div>
     <div class="sub">ÉDITEUR DE CARTE</div>
 
@@ -234,9 +288,11 @@
     </div>
 
     <div class="panelActions">
+      <div id="saveStatus" class="saveStatus" data-state="draft"><span>Nouvelle carte non enregistrée</span></div>
       <div class="buttons">
-        <button id="resetBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11a9 9 0 1 1 2.64 6.36M3 4v7h7"/></svg>Réinitialiser</button>
-        <button id="downloadBtn" class="primary"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 19h16"/></svg>Exporter PNG</button>
+        <button id="resetBtn" type="button" title="Nouvelle carte"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Nouvelle</button>
+        <button id="saveBtn" type="button" title="Enregistrer dans backups (Ctrl+S)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg><span id="saveLabel">Enregistrer</span></button>
+        <button id="downloadBtn" class="primary" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 19h16"/></svg>Exporter PNG</button>
       </div>
       <div class="tiny">PNG · 1500 × 2100 px · portrait 5:7</div>
     </div>
@@ -246,6 +302,32 @@
     <div class="previewWrap"><canvas id="card" width="1500" height="2100"></canvas></div>
   </main>
 </div>
+
+<dialog id="libraryDialog" class="library" aria-labelledby="libraryTitle">
+  <div class="libraryHead">
+    <div>
+      <div class="eyebrow">ONE PRODIGE · CARD STUDIO</div>
+      <h2 id="libraryTitle">Bibliothèque de cartes</h2>
+      <p id="libraryFolder" class="libraryFolder">Aucun dossier connecté</p>
+      <p class="libraryHint">Chaque carte : backups / nom-de-la-carte / card.json, preview.png, render et fond.</p>
+    </div>
+    <div class="libraryTools">
+      <button id="connectFolderBtn" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg><span>Choisir le dossier</span></button>
+      <button id="closeLibraryBtn" class="iconBtn" type="button" title="Fermer" aria-label="Fermer la bibliothèque"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </div>
+  </div>
+  <div class="libraryBar">
+    <label class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="librarySearch" type="search" placeholder="Rechercher un nom, une rareté, un numéro" aria-label="Rechercher une carte" /></label>
+    <span id="libraryCount" class="libraryCount">0 carte</span>
+  </div>
+  <div id="libraryGrid" class="libraryGrid"></div>
+  <div id="libraryEmpty" class="libraryEmpty">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>
+    <strong id="libraryEmptyTitle">Aucun dossier connecté</strong>
+    <span id="libraryEmptyText"></span>
+  </div>
+</dialog>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script>
 const canvas = document.getElementById('card');
@@ -289,7 +371,7 @@ const $ = id => document.getElementById(id);
 let character = null;
 let background = null;
 
-const state = {
+const DEFAULT_STATE = Object.freeze({
   name: 'JULLE',
   number: '10',
   rarity: 'LÉGENDAIRE',
@@ -301,7 +383,10 @@ const state = {
   charScale: 100,
   charX: 0,
   charY: 0
-};
+});
+const FIELD_IDS = Object.keys(DEFAULT_STATE);
+const NUMERIC_FIELDS = ['charScale','charX','charY'];
+const state = {...DEFAULT_STATE};
 
 function bind(){
   ['name','number','rarity','mainText','subText','gold','dark','cream','charScale','charX','charY']
@@ -316,11 +401,12 @@ function bind(){
       });
     });
 
-  bindImagePicker('characterFile','characterFileName',img=>{character=img;draw();});
-  bindImagePicker('bgFile','bgFileName',img=>{background=img;draw();});
+  bindImagePicker('characterFile','characterFileName',(img,file)=>{character=img;characterAsset={blob:file,name:file.name};draw();});
+  bindImagePicker('bgFile','bgFileName',(img,file)=>{background=img;backgroundAsset={blob:file,name:file.name};draw();});
 
   $('downloadBtn').addEventListener('click', downloadPNG);
-  $('resetBtn').addEventListener('click', () => location.reload());
+  $('resetBtn').addEventListener('click', newCard);
+  $('saveBtn').addEventListener('click', saveCard);
 }
 
 function bindImagePicker(inputId,nameId,onImageLoaded){
@@ -332,7 +418,7 @@ function bindImagePicker(inputId,nameId,onImageLoaded){
     const supported=file.type.startsWith('image/')||/\.(png|jpe?g|webp)$/i.test(file.name);
     if(!supported) return;
     name.textContent=file.name;
-    loadImageFile(file,onImageLoaded);
+    loadImageFile(file,img=>onImageLoaded(img,file));
   };
 
   input.addEventListener('change',event=>loadFile(event.target.files[0]));
@@ -869,7 +955,487 @@ function downloadPNG(){
   a.click();
 }
 
+let characterAsset=null;
+let backgroundAsset=null;
+let currentCard=null;
+let rootHandle=null;
+let backupsDir=null;
+let libraryCards=[];
+let previewUrls=[];
+let toastTimer=null;
+const supportsFolders=typeof window.showDirectoryPicker==='function';
+const EMPTY_FILE_LABEL='PNG, WEBP ou JPG';
+const RARITY_LABELS={COMMUN:'Commun',RARE:'Rare','ÉPIQUE':'Épique','LÉGENDAIRE':'Légendaire',PRISMATIQUE:'Prismatique'};
+const ICONS={
+  edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+  download:'<path d="M12 3v12m-5-5 5 5 5-5M4 19h16"/>',
+  trash:'<path d="M3 6h18M8 6V4h8v2m3 0-1 14H6L5 6m5 5v6m4-6v6"/>'
+};
+
+function slugify(value){
+  return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,40)||'carte';
+}
+
+function fileExtension(asset){
+  const byType={'image/png':'png','image/jpeg':'jpg','image/webp':'webp'}[asset.blob.type];
+  if(byType) return byType;
+  const match=/\.(png|jpe?g|webp)$/i.exec(asset.name||'');
+  return match?match[1].toLowerCase().replace('jpeg','jpg'):'png';
+}
+
+async function writeFile(dir,name,blob){
+  const handle=await dir.getFileHandle(name,{create:true});
+  const writable=await handle.createWritable();
+  await writable.write(blob);
+  await writable.close();
+}
+
+async function readFile(dir,name){
+  return (await dir.getFileHandle(name)).getFile();
+}
+
+function canvasBlob(){
+  return new Promise(resolve=>canvas.toBlob(resolve,'image/png'));
+}
+
+function blobToImage(blob){
+  return new Promise((resolve,reject)=>{
+    const url=URL.createObjectURL(blob);
+    const img=new Image();
+    img.onload=()=>{URL.revokeObjectURL(url);resolve(img);};
+    img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Image illisible'));};
+    img.src=url;
+  });
+}
+
+function showToast(message,type='success'){
+  const toast=$('toast');
+  const host=$('libraryDialog').open?$('libraryDialog'):document.body;
+  if(toast.parentElement!==host) host.appendChild(toast);
+  toast.textContent=message;
+  toast.dataset.type=type;
+  toast.classList.add('is-visible');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>toast.classList.remove('is-visible'),2600);
+}
+
+function openHandleStore(){
+  return new Promise((resolve,reject)=>{
+    const request=indexedDB.open('one-prodige-card-studio',1);
+    request.onupgradeneeded=()=>request.result.createObjectStore('handles');
+    request.onsuccess=()=>resolve(request.result);
+    request.onerror=()=>reject(request.error);
+  });
+}
+
+async function storeRootHandle(handle){
+  const db=await openHandleStore();
+  await new Promise((resolve,reject)=>{
+    const transaction=db.transaction('handles','readwrite');
+    transaction.objectStore('handles').put(handle,'root');
+    transaction.oncomplete=resolve;
+    transaction.onerror=()=>reject(transaction.error);
+  });
+  db.close();
+}
+
+async function readRootHandle(){
+  const db=await openHandleStore();
+  const handle=await new Promise((resolve,reject)=>{
+    const request=db.transaction('handles').objectStore('handles').get('root');
+    request.onsuccess=()=>resolve(request.result);
+    request.onerror=()=>reject(request.error);
+  });
+  db.close();
+  return handle;
+}
+
+function folderLabel(){
+  if(!rootHandle) return '';
+  if(backupsDir===rootHandle||!rootHandle.name) return 'backups';
+  return `${rootHandle.name}/backups`;
+}
+
+async function useRoot(handle){
+  rootHandle=handle;
+  backupsDir=handle.name.toLowerCase()==='backups'?handle:await handle.getDirectoryHandle('backups',{create:true});
+  updateStatus();
+  await refreshLibrary();
+}
+
+async function connectFolder(){
+  if(!supportsFolders){
+    showToast('Sauvegarde disponible uniquement dans Chrome ou Edge','error');
+    return false;
+  }
+  try{
+    const picked=await window.showDirectoryPicker({id:'one-prodige-cards',mode:'readwrite'});
+    await useRoot(picked);
+    await storeRootHandle(picked);
+    showToast(`Dossier connecté : ${folderLabel()}`);
+    return true;
+  }catch(error){
+    if(error.name!=='AbortError') showToast('Accès au dossier impossible','error');
+    return false;
+  }
+}
+
+async function ensureFolder(){
+  if(backupsDir) return true;
+  if(rootHandle){
+    try{
+      if(await rootHandle.requestPermission({mode:'readwrite'})==='granted'){
+        await useRoot(rootHandle);
+        return true;
+      }
+    }catch{}
+  }
+  return connectFolder();
+}
+
+async function restoreFolder(){
+  if(!supportsFolders){updateStatus();renderLibrary();return;}
+  try{
+    const handle=await readRootHandle();
+    if(handle){
+      rootHandle=handle;
+      if(await handle.queryPermission({mode:'readwrite'})==='granted') await useRoot(handle);
+    }
+  }catch{}
+  updateStatus();
+  renderLibrary();
+}
+
+function updateStatus(){
+  const status=$('saveStatus');
+  const cardText=currentCard?`Modification de « ${currentCard.data.fields.name||'Sans nom'} »`:'Nouvelle carte non enregistrée';
+  status.firstElementChild.textContent=`${cardText} · ${backupsDir?folderLabel():'aucun dossier'}`;
+  status.dataset.state=currentCard?'saved':'draft';
+  $('libraryFolder').textContent=!supportsFolders
+    ?'Navigateur non compatible : ouvre ce fichier dans Chrome ou Edge.'
+    :backupsDir?`Dossier : ${folderLabel()}`:rootHandle?`Autorisation requise pour « ${rootHandle.name} »`:'Aucun dossier connecté';
+  const connect=$('connectFolderBtn');
+  connect.disabled=!supportsFolders;
+  connect.lastElementChild.textContent=backupsDir?'Changer de dossier':rootHandle?'Autoriser l’accès':'Choisir le dossier';
+}
+
+function syncInputs(){
+  for(const id of FIELD_IDS) $(id).value=state[id];
+  $('characterFile').value='';
+  $('bgFile').value='';
+  $('characterFileName').textContent=characterAsset?.name||EMPTY_FILE_LABEL;
+  $('bgFileName').textContent=backgroundAsset?.name||EMPTY_FILE_LABEL;
+}
+
+function newCard(){
+  Object.assign(state,DEFAULT_STATE);
+  character=null;
+  background=null;
+  characterAsset=null;
+  backgroundAsset=null;
+  currentCard=null;
+  syncInputs();
+  draw();
+  updateStatus();
+  renderLibrary();
+  showToast('Nouvelle carte prête');
+}
+
+function setSaving(isSaving){
+  $('saveBtn').disabled=isSaving;
+  $('saveLabel').textContent=isSaving?'Enregistrement…':'Enregistrer';
+}
+
+async function saveCard(){
+  if($('saveBtn').disabled||!(await ensureFolder())) return;
+  setSaving(true);
+  try{
+    const now=new Date().toISOString();
+    const previous=currentCard?.data||null;
+    let folder=currentCard?.folder||null;
+    let dir=null;
+    if(folder){
+      try{dir=await backupsDir.getDirectoryHandle(folder);}catch{folder=null;}
+    }
+    if(!folder){
+      folder=`${slugify(state.name)}-${Date.now().toString(36)}`;
+      dir=await backupsDir.getDirectoryHandle(folder,{create:true});
+    }
+
+    const files={render:null,background:null,preview:'preview.png'};
+    if(characterAsset){
+      files.render=`render.${fileExtension(characterAsset)}`;
+      await writeFile(dir,files.render,characterAsset.blob);
+    }
+    if(backgroundAsset){
+      files.background=`fond.${fileExtension(backgroundAsset)}`;
+      await writeFile(dir,files.background,backgroundAsset.blob);
+    }
+    for(const key of ['render','background']){
+      const oldName=previous?.files?.[key];
+      if(oldName&&oldName!==files[key]) await dir.removeEntry(oldName).catch(()=>{});
+    }
+    await writeFile(dir,files.preview,await canvasBlob());
+
+    const data={
+      app:'one-prodige-card-studio',
+      version:1,
+      createdAt:previous?.createdAt||now,
+      updatedAt:now,
+      fields:{...state},
+      files,
+      sources:{render:characterAsset?.name||null,background:backgroundAsset?.name||null}
+    };
+    await writeFile(dir,'card.json',new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+    currentCard={folder,data};
+    await refreshLibrary();
+    updateStatus();
+    showToast(previous?'Carte mise à jour':`Carte enregistrée dans backups/${folder}`);
+  }catch{
+    showToast('Échec de l’enregistrement','error');
+  }finally{
+    setSaving(false);
+  }
+}
+
+let refreshToken=0;
+async function refreshLibrary(){
+  const token=++refreshToken;
+  const urls=[];
+  const cards=[];
+  if(backupsDir){
+    try{
+      for await(const handle of backupsDir.values()){
+        if(handle.kind!=='directory') continue;
+        try{
+          const data=JSON.parse(await (await readFile(handle,'card.json')).text());
+          if(!data?.fields) continue;
+          let preview=null;
+          try{
+            preview=URL.createObjectURL(await readFile(handle,data.files?.preview||'preview.png'));
+            urls.push(preview);
+          }catch{}
+          cards.push({folder:handle.name,dir:handle,data,preview});
+        }catch{}
+      }
+    }catch{
+      showToast('Lecture du dossier impossible','error');
+    }
+  }
+  // A newer refresh started meanwhile: drop this result.
+  if(token!==refreshToken){
+    urls.forEach(url=>URL.revokeObjectURL(url));
+    return;
+  }
+  previewUrls.forEach(url=>URL.revokeObjectURL(url));
+  previewUrls=urls;
+  cards.sort((a,b)=>String(b.data.updatedAt||'').localeCompare(String(a.data.updatedAt||'')));
+  libraryCards=cards;
+  renderLibrary();
+}
+
+function formatDate(value){
+  const date=new Date(value);
+  if(Number.isNaN(date.getTime())) return '';
+  return new Intl.DateTimeFormat('fr-FR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}).format(date);
+}
+
+function iconButton(iconName,label,className=''){
+  const button=document.createElement('button');
+  button.type='button';
+  button.className=className;
+  button.title=label;
+  button.setAttribute('aria-label',label);
+  button.innerHTML=`<svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[iconName]}</svg>`;
+  return button;
+}
+
+function createCardItem(card){
+  const fields=card.data.fields;
+  const name=fields.name||'Sans nom';
+  const item=document.createElement('article');
+  item.className='cardItem';
+  if(currentCard?.folder===card.folder) item.classList.add('is-current');
+
+  const thumb=document.createElement('button');
+  thumb.type='button';
+  thumb.className='cardThumb';
+  thumb.setAttribute('aria-label',`Modifier ${name}`);
+  if(card.preview){
+    const img=document.createElement('img');
+    img.src=card.preview;
+    img.alt='';
+    img.loading='lazy';
+    thumb.append(img);
+  }
+  thumb.addEventListener('click',()=>openCard(card));
+
+  const info=document.createElement('div');
+  info.className='cardInfo';
+  const title=document.createElement('strong');
+  title.textContent=name;
+  const meta=document.createElement('div');
+  meta.className='cardMeta';
+  const chip=document.createElement('span');
+  chip.className='rarityChip';
+  chip.style.setProperty('--chip',RARITY_STYLES[fields.rarity]?.main||'#d9b23f');
+  chip.textContent=RARITY_LABELS[fields.rarity]||'Carte';
+  const date=document.createElement('span');
+  date.className='cardDate';
+  date.textContent=formatDate(card.data.updatedAt);
+  meta.append(chip,date);
+  info.append(title,meta);
+
+  const actions=document.createElement('div');
+  actions.className='cardActions';
+  const edit=iconButton('edit','Modifier la carte','grow');
+  edit.append('Modifier');
+  edit.addEventListener('click',()=>openCard(card));
+  const png=iconButton('download','Télécharger le PNG');
+  png.addEventListener('click',()=>downloadSavedPng(card));
+  const remove=iconButton('trash','Supprimer la carte','danger');
+  const confirmText=document.createElement('span');
+  confirmText.className='confirmText';
+  confirmText.textContent='Confirmer';
+  remove.append(confirmText);
+  remove.addEventListener('click',()=>deleteCard(card,remove));
+  actions.append(edit,png,remove);
+
+  item.append(thumb,info,actions);
+  return item;
+}
+
+function renderLibrary(){
+  const query=$('librarySearch').value.trim().toLowerCase();
+  const visible=libraryCards.filter(card=>{
+    const fields=card.data.fields;
+    return !query||`${fields.name} ${fields.number} ${RARITY_LABELS[fields.rarity]||''}`.toLowerCase().includes(query);
+  });
+  const grid=$('libraryGrid');
+  grid.replaceChildren(...visible.map(createCardItem));
+  const count=libraryCards.length;
+  $('libraryCount').textContent=`${count} carte${count>1?'s':''}`;
+  $('libraryCountBadge').textContent=count?String(count):'';
+
+  const isEmpty=visible.length===0;
+  grid.hidden=isEmpty;
+  $('libraryEmpty').classList.toggle('is-visible',isEmpty);
+  if(!backupsDir){
+    $('libraryEmptyTitle').textContent='Aucun dossier connecté';
+    $('libraryEmptyText').textContent=supportsFolders
+      ?'Choisis un dossier : le sous-dossier « backups » y sera créé, ou réutilisé s’il existe déjà.'
+      :'La sauvegarde sur le disque nécessite Chrome ou Edge.';
+  }else if(!count){
+    $('libraryEmptyTitle').textContent='Aucune carte enregistrée';
+    $('libraryEmptyText').textContent='Crée une carte puis clique sur Enregistrer.';
+  }else{
+    $('libraryEmptyTitle').textContent='Aucun résultat';
+    $('libraryEmptyText').textContent='Aucune carte ne correspond à cette recherche.';
+  }
+}
+
+async function openCard(card){
+  try{
+    const fields=card.data.fields||{};
+    const next={...DEFAULT_STATE};
+    for(const key of FIELD_IDS){
+      if(fields[key]===undefined||fields[key]===null) continue;
+      next[key]=NUMERIC_FIELDS.includes(key)?(Number(fields[key])||0):String(fields[key]);
+    }
+    if(!RARITY_STYLES[next.rarity]) next.rarity=DEFAULT_STATE.rarity;
+    for(const key of ['gold','dark','cream']){
+      if(!/^#[0-9a-f]{6}$/i.test(next[key])) next[key]=DEFAULT_STATE[key];
+    }
+
+    const files=card.data.files||{};
+    const sources=card.data.sources||{};
+    let nextCharacter=null,nextCharacterAsset=null,nextBackground=null,nextBackgroundAsset=null;
+    if(files.render){
+      const file=await readFile(card.dir,files.render);
+      nextCharacter=await blobToImage(file);
+      nextCharacterAsset={blob:file,name:sources.render||file.name};
+    }
+    if(files.background){
+      const file=await readFile(card.dir,files.background);
+      nextBackground=await blobToImage(file);
+      nextBackgroundAsset={blob:file,name:sources.background||file.name};
+    }
+
+    Object.assign(state,next);
+    character=nextCharacter;
+    characterAsset=nextCharacterAsset;
+    background=nextBackground;
+    backgroundAsset=nextBackgroundAsset;
+    currentCard={folder:card.folder,data:card.data};
+    syncInputs();
+    draw();
+    updateStatus();
+    renderLibrary();
+    $('libraryDialog').close();
+    showToast(`« ${state.name||'Sans nom'} » prête à être modifiée`);
+  }catch{
+    showToast('Impossible d’ouvrir cette carte','error');
+  }
+}
+
+async function downloadSavedPng(card){
+  try{
+    const file=await readFile(card.dir,card.data.files?.preview||'preview.png');
+    const url=URL.createObjectURL(file);
+    const link=document.createElement('a');
+    link.href=url;
+    link.download=`${slugify(card.data.fields.name)}.png`;
+    link.click();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);
+    showToast('PNG téléchargé');
+  }catch{
+    showToast('Aperçu PNG introuvable','error');
+  }
+}
+
+async function deleteCard(card,button){
+  if(!button.classList.contains('is-confirm')){
+    button.classList.add('is-confirm');
+    button.setAttribute('aria-label','Confirmer la suppression');
+    setTimeout(()=>{
+      button.classList.remove('is-confirm');
+      button.setAttribute('aria-label','Supprimer la carte');
+    },3000);
+    return;
+  }
+  try{
+    await backupsDir.removeEntry(card.folder,{recursive:true});
+    if(currentCard?.folder===card.folder) currentCard=null;
+    await refreshLibrary();
+    updateStatus();
+    showToast('Carte supprimée');
+  }catch{
+    showToast('Suppression impossible','error');
+  }
+}
+
+function initLibrary(){
+  const dialog=$('libraryDialog');
+  $('openLibraryBtn').addEventListener('click',()=>{
+    dialog.showModal();
+    if(backupsDir) refreshLibrary();
+    else renderLibrary();
+  });
+  $('closeLibraryBtn').addEventListener('click',()=>dialog.close());
+  dialog.addEventListener('click',event=>{if(event.target===dialog) dialog.close();});
+  $('connectFolderBtn').addEventListener('click',()=>rootHandle&&!backupsDir?ensureFolder():connectFolder());
+  $('librarySearch').addEventListener('input',renderLibrary);
+  document.addEventListener('keydown',event=>{
+    if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='s'){
+      event.preventDefault();
+      saveCard();
+    }
+  });
+  restoreFolder();
+}
+
 bind();
+initLibrary();
 draw();
 </script>
 </body>
