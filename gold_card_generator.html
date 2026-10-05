@@ -1,0 +1,792 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Gold Card Generator</title>
+<style>
+  :root{
+    --bg:#111214;
+    --panel:#1a1c20;
+    --panel2:#22252a;
+    --gold:#d9a934;
+    --gold2:#f4d77b;
+    --cream:#f7efdc;
+    --muted:#a8abb2;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    background:
+      radial-gradient(circle at 15% 0%, #2a2416 0, transparent 38%),
+      radial-gradient(circle at 90% 15%, #1d2a35 0, transparent 35%),
+      #0e0f11;
+    color:#fff;
+    min-height:100vh;
+  }
+  .app{
+    display:grid;
+    grid-template-columns:380px minmax(0,1fr);
+    gap:22px;
+    padding:22px;
+    max-width:1500px;
+    margin:auto;
+  }
+  .panel{
+    background:linear-gradient(180deg,#1d1f23,#15171a);
+    border:1px solid #33363d;
+    border-radius:18px;
+    padding:18px;
+    box-shadow:0 20px 50px #0008;
+    height:max-content;
+    position:sticky;
+    top:20px;
+  }
+  h1{font-size:22px;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:13px;margin-bottom:18px}
+  .field{margin:12px 0}
+  label{display:block;font-size:12px;color:#d7d9dd;margin:0 0 6px;font-weight:700;letter-spacing:.03em}
+  input,textarea,select{
+    width:100%;
+    border:1px solid #3a3d44;
+    background:#0f1012;
+    color:#fff;
+    border-radius:10px;
+    padding:10px 11px;
+    outline:none;
+  }
+  input:focus,textarea:focus,select:focus{border-color:#a77b1f;box-shadow:0 0 0 3px #d9a93418}
+  textarea{min-height:84px;resize:vertical}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .color{height:42px;padding:4px}
+  input[type="file"]{padding:8px}
+  input[type="range"]{padding:0}
+  .hint{font-size:11px;color:#8d9199;margin-top:5px;line-height:1.35}
+  .buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px}
+  button{
+    border:0;border-radius:11px;padding:11px 13px;font-weight:800;cursor:pointer;
+    background:#292c32;color:white;border:1px solid #3c4048;
+  }
+  button.primary{
+    background:linear-gradient(180deg,#f0c65b,#b9851c);
+    color:#17120a;border-color:#e2bb57;
+    box-shadow:0 10px 25px #0006;
+  }
+  button:hover{filter:brightness(1.06)}
+  .stage{
+    min-height:calc(100vh - 44px);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .previewWrap{
+    width:min(100%,760px,calc(71.4vh - 17px));
+    aspect-ratio:5/7;
+    filter:drop-shadow(0 30px 65px #0009);
+  }
+  canvas{
+    width:100%;height:100%;display:block;
+    border-radius:28px;
+    background:#111;
+  }
+  .tiny{font-size:10px;color:#777}
+  .sectionTitle{display:flex;align-items:center;gap:9px;margin-top:16px;padding-top:12px;border-top:1px solid #2e3136;color:#f1c85f;font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+  .sectionTitle svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  @media(max-width:980px){
+    .app{grid-template-columns:minmax(0,1fr)}
+    .panel{position:relative;top:auto;min-width:0}
+    .stage{min-height:auto}
+    .previewWrap{width:min(100%,700px,calc(71.4vh - 17px))}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="panel">
+    <h1>Gold Card Generator</h1>
+    <div class="sub">Carte joueur · format portrait 5:7</div>
+
+    <div class="sectionTitle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>Contenu</div>
+    <div class="field">
+      <label>Nom du personnage</label>
+      <input id="name" value="JULLE" />
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>N°</label>
+        <input id="number" value="10" />
+      </div>
+      <div class="field">
+        <label>Rareté</label>
+        <select id="rarity">
+          <option value="COMMUN">Commun</option>
+          <option value="RARE">Rare</option>
+          <option value="ÉPIQUE">Épique</option>
+          <option value="LÉGENDAIRE" selected>Légendaire</option>
+          <option value="PRISMATIQUE">Prismatique</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Phrase principale</label>
+      <textarea id="mainText">Julle, la star finlandaise de la 1P, est enfin là pour montrer toute l’étendue de son talent.</textarea>
+    </div>
+
+    <div class="field">
+      <label>Phrase secondaire</label>
+      <textarea id="subText">Beaucoup l’attendaient… l’attente est enfin terminée.</textarea>
+    </div>
+
+    <div class="sectionTitle"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>Illustration</div>
+    <div class="field">
+      <label>Personnage / illustration</label>
+      <input id="characterFile" type="file" accept="image/png,image/webp,image/jpeg" />
+      <div class="hint">Pour un alignement exact, utilise un PNG détouré avec la même taille et le même cadrage que l’image de fond.</div>
+    </div>
+
+    <div class="field">
+      <label>Fond de la carte</label>
+      <input id="bgFile" type="file" accept="image/png,image/webp,image/jpeg" />
+    </div>
+
+    <div class="sectionTitle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18h1a2 2 0 0 0 1.8-2.9 1.8 1.8 0 0 1 1.6-2.6H19a2 2 0 0 0 2-2A9 9 0 0 0 12 3Z"/><circle cx="7.5" cy="10" r="1"/><circle cx="12" cy="7.5" r="1"/><circle cx="16.5" cy="10" r="1"/></svg>Couleurs</div>
+    <div class="row3">
+      <div class="field">
+        <label>Couleur principale</label>
+        <input id="gold" class="color" type="color" value="#D9B23F" />
+      </div>
+      <div class="field">
+        <label>Fond sombre</label>
+        <input id="dark" class="color" type="color" value="#050403" />
+      </div>
+      <div class="field">
+        <label>Texte clair</label>
+        <input id="cream" class="color" type="color" value="#F7EFDC" />
+      </div>
+    </div>
+
+    <div class="sectionTitle"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2"/><path d="M12 2v2M22 12h-2M12 22v-2M2 12h2"/></svg>Placement</div>
+    <div class="field">
+      <label>Taille du personnage</label>
+      <input id="charScale" type="range" min="35" max="200" value="100" />
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>Personnage X</label>
+        <input id="charX" type="range" min="-35" max="35" value="0" />
+      </div>
+      <div class="field">
+        <label>Personnage Y</label>
+        <input id="charY" type="range" min="-25" max="90" value="0" />
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button id="resetBtn">Réinitialiser</button>
+      <button id="downloadBtn" class="primary">Exporter PNG</button>
+    </div>
+    <div class="tiny" style="margin-top:10px">
+      Export PNG · 1500 × 2100 px · haute définition · portrait 5:7.
+    </div>
+  </aside>
+
+  <main class="stage">
+    <div class="previewWrap"><canvas id="card" width="1500" height="2100"></canvas></div>
+  </main>
+</div>
+
+<script>
+const canvas = document.getElementById('card');
+const ctx = canvas.getContext('2d');
+
+const paperTexture = document.createElement('canvas');
+paperTexture.width = 128;
+paperTexture.height = 128;
+const paperTextureContext = paperTexture.getContext('2d');
+const paperTextureData = paperTextureContext.createImageData(128,128);
+let textureSeed = 9187;
+for(let index=0;index<paperTextureData.data.length;index+=4){
+  textureSeed=(textureSeed*1664525+1013904223)>>>0;
+  const value=textureSeed%12;
+  paperTextureData.data[index]=value;
+  paperTextureData.data[index+1]=value;
+  paperTextureData.data[index+2]=value;
+  paperTextureData.data[index+3]=255;
+}
+paperTextureContext.putImageData(paperTextureData,0,0);
+const grainPattern=ctx.createPattern(paperTexture,'repeat');
+let dustSeed=4417;
+const siteDust=Array.from({length:820},()=>{
+  const random=()=>{
+    dustSeed=(dustSeed*1664525+1013904223)>>>0;
+    return dustSeed/4294967296;
+  };
+  return {x:random()*1080,y:random()*1512,radius:.55+random()*1.25,alpha:.08+random()*.18};
+});
+let bokehSeed=1771;
+const siteBokeh=Array.from({length:70},()=>{
+  const random=()=>{
+    bokehSeed=(bokehSeed*1664525+1013904223)>>>0;
+    return bokehSeed/4294967296;
+  };
+  return {x:random()*1080,y:random()*1512,radius:3+Math.pow(random(),1.6)*30,alpha:.12+random()*.16};
+});
+
+const $ = id => document.getElementById(id);
+
+let character = null;
+let background = null;
+
+const state = {
+  name: 'JULLE',
+  number: '10',
+  rarity: 'LÉGENDAIRE',
+  mainText: 'Julle, la star finlandaise de la 1P, est enfin là pour montrer toute l’étendue de son talent.',
+  subText: 'Beaucoup l’attendaient… l’attente est enfin terminée.',
+  gold: '#D9B23F',
+  dark: '#050403',
+  cream: '#F7EFDC',
+  charScale: 100,
+  charX: 0,
+  charY: 0
+};
+
+function bind(){
+  ['name','number','rarity','mainText','subText','gold','dark','cream','charScale','charX','charY']
+    .forEach(id => {
+      $(id).addEventListener('input', () => {
+        if (id in state) state[id] = ['charScale','charX','charY'].includes(id) ? +$(id).value : $(id).value;
+                if (id in state) state[id] = ['charScale','charX','charY'].includes(id) ? +$(id).value : $(id).value;
+                if (id === 'rarity') {
+                  state.gold = RARITY_STYLES[state.rarity].main;
+                  $('gold').value = state.gold;
+                }
+        draw();
+      });
+    });
+
+  $('characterFile').addEventListener('change', e => loadImageFile(e.target.files[0], img => { character = img; draw(); }));
+  $('bgFile').addEventListener('change', e => loadImageFile(e.target.files[0], img => { background = img; draw(); }));
+
+  $('downloadBtn').addEventListener('click', downloadPNG);
+  $('resetBtn').addEventListener('click', () => location.reload());
+}
+
+function loadImageFile(file, cb){
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => cb(img);
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function roundRect(x,y,w,h,r,fill,stroke,line=1){
+  ctx.beginPath();
+  ctx.roundRect(x,y,w,h,r);
+  if(fill){ctx.fillStyle=fill;ctx.fill();}
+  if(stroke){ctx.lineWidth=line;ctx.strokeStyle=stroke;ctx.stroke();}
+}
+
+function fitCover(img, x,y,w,h){
+  const scale = Math.max(w/img.width, h/img.height);
+  const sw = img.width*scale;
+  const sh = img.height*scale;
+  ctx.drawImage(img, x+(w-sw)/2, y+(h-sh)/2, sw, sh);
+}
+
+function fitContain(img, x,y,w,h,scale=1){
+  const s = Math.min(w/img.width, h/img.height)*scale;
+  const iw = img.width*s, ih = img.height*s;
+  ctx.drawImage(img, x+(w-iw)/2, y+(h-ih)/2, iw, ih);
+}
+
+function wrap(text, maxWidth, font){
+  ctx.font = font;
+  const words = String(text || '').trim().split(/\s+/).filter(Boolean);
+  const lines = [];
+  let line = '';
+  for(const word of words){
+    let piece = '';
+    const pieces = [];
+    for(const character of word){
+      if(piece && ctx.measureText(piece + character).width > maxWidth){
+        pieces.push(piece);
+        piece = character;
+      } else piece += character;
+    }
+    if(piece) pieces.push(piece);
+    for(const part of pieces){
+      const test = line ? line + ' ' + part : part;
+      if(ctx.measureText(test).width <= maxWidth) line = test;
+      else {
+        if(line) lines.push(line);
+        line = part;
+      }
+    }
+  }
+  if(line) lines.push(line);
+  return lines;
+}
+
+function ellipsizeLine(text, maxWidth){
+  let line = text;
+  while(line && ctx.measureText(line + '…').width > maxWidth) line = line.slice(0,-1);
+  return line ? line + '…' : '…';
+}
+
+function fitLines(lines, maxLines, maxWidth){
+  if(lines.length <= maxLines) return lines;
+  const fitted = lines.slice(0,maxLines);
+  fitted[maxLines - 1] = ellipsizeLine(fitted[maxLines - 1],maxWidth);
+  return fitted;
+}
+
+const RARITY_STYLES={
+  COMMUN:{light:'#d4d7dc',main:'#858b95',deep:'#515761',text:'#e1e4e9'},
+  RARE:{light:'#b2e2ff',main:'#2879da',deep:'#123f80',text:'#badaff'},
+  ÉPIQUE:{light:'#e8c7ff',main:'#9740d8',deep:'#4b176f',text:'#e6c3ff'},
+  LÉGENDAIRE:{light:'#fff0a6',main:'#d9b23f',deep:'#806018',text:'#ffe28b'},
+  PRISMATIQUE:{light:'#efffff',main:'#23d5ed',deep:'#7838d8',text:'#f2eaff',holographic:true}
+};
+
+function rarityGradient(y1,y2,style){
+  const gradient=ctx.createLinearGradient(0,y1,0,y2);
+  if(style.holographic){
+    gradient.addColorStop(0,'#f3ffff');
+    gradient.addColorStop(.13,'#68f2ff');
+    gradient.addColorStop(.3,style.main);
+    gradient.addColorStop(.46,'#5268ff');
+    gradient.addColorStop(.62,style.deep);
+    gradient.addColorStop(.78,'#e855d5');
+    gradient.addColorStop(.91,'#ffe7a3');
+    gradient.addColorStop(1,'#67eaff');
+    return gradient;
+  }
+  gradient.addColorStop(0,style.light);
+  gradient.addColorStop(.35,style.main);
+  gradient.addColorStop(.72,style.deep);
+  gradient.addColorStop(1,style.light);
+  return gradient;
+}
+
+function rarityRibbonGradient(style){
+  if(!style.holographic) return rarityGradient(1000,1086,style);
+  const gradient=ctx.createLinearGradient(90,1000,990,1086);
+  gradient.addColorStop(0,'#38d9ef');
+  gradient.addColorStop(.2,'#3e88ff');
+  gradient.addColorStop(.42,'#8150f2');
+  gradient.addColorStop(.62,'#e44dc8');
+  gradient.addColorStop(.82,'#f2cc75');
+  gradient.addColorStop(1,'#42dce9');
+  return gradient;
+}
+
+function drawPrismaticFoil(x,y,width,height,radius){
+  ctx.save();
+  ctx.beginPath();
+  ctx.roundRect(x,y,width,height,radius);
+  ctx.clip();
+  const sheen=ctx.createLinearGradient(x,y,x+width,y+height);
+  sheen.addColorStop(0,'rgba(255,255,255,0)');
+  sheen.addColorStop(.42,'rgba(255,255,255,.025)');
+  sheen.addColorStop(.5,'rgba(255,255,255,.2)');
+  sheen.addColorStop(.58,'rgba(255,255,255,.035)');
+  sheen.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=sheen;
+  ctx.fillRect(x,y,width,height);
+  ctx.restore();
+}
+
+function getRarityStyle(){
+  const palette=RARITY_STYLES[state.rarity]||RARITY_STYLES.LÉGENDAIRE;
+  return {...palette,main:state.gold||palette.main};
+}
+
+function colorWithAlpha(hex,alpha){
+  const value=hex.replace('#','');
+  const red=parseInt(value.slice(0,2),16);
+  const green=parseInt(value.slice(2,4),16);
+  const blue=parseInt(value.slice(4,6),16);
+  return `rgba(${red},${green},${blue},${alpha})`;
+}
+
+function drawGoldBorder(){
+  roundRect(24,24,1032,1464,42,null,rarityGradient(24,1488,getRarityStyle()),1.2);
+}
+
+function drawHeader(){
+  const gx = 42, gy = 42, gw = 996, gh = 106;
+  const rarityStyle=getRarityStyle();
+  roundRect(gx,gy,gw,gh,30,'#0b0c0fdd',rarityGradient(gy,gy+gh,rarityStyle),1.5);
+  if(rarityStyle.holographic) drawPrismaticFoil(gx,gy,gw,gh,30);
+
+  ctx.textBaseline='middle';
+  ctx.fillStyle=state.cream;
+  ctx.font='700 13px Georgia, serif';
+  ctx.letterSpacing='3px';
+  ctx.fillStyle='rgba(247,239,220,.72)';
+  ctx.fillText('FORTNITE  /  ONE PRODIGE',70,gy+24);
+  ctx.fillStyle=state.cream;
+  let titleSize=64;
+  let title=state.name.toUpperCase();
+  ctx.font=`900 ${titleSize}px Georgia, serif`;
+  ctx.letterSpacing='1px';
+  while(ctx.measureText(title).width > 810 && titleSize > 28){
+    titleSize--;
+    ctx.font=`900 ${titleSize}px Georgia, serif`;
+  }
+  if(ctx.measureText(title).width > 810) title=ellipsizeLine(title,810);
+  ctx.fillText(title,70,gy+74);
+
+  ctx.textAlign='left';
+  ctx.letterSpacing='0px';
+}
+
+function drawHeaderBadge(){
+  ctx.strokeStyle=rarityGradient(62,126,getRarityStyle());
+  ctx.lineWidth=1;
+  ctx.beginPath();
+  ctx.moveTo(916,62);
+  ctx.lineTo(916,126);
+  ctx.stroke();
+
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  ctx.fillStyle='rgba(247,239,220,.65)';
+  ctx.font='700 12px Georgia, serif';
+  ctx.letterSpacing='2px';
+  ctx.fillText('N°',974,70);
+
+  let numberSize=44;
+  ctx.font=`900 ${numberSize}px Georgia, serif`;
+  while(ctx.measureText(state.number).width > 102 && numberSize > 20){
+    numberSize--;
+    ctx.font=`900 ${numberSize}px Georgia, serif`;
+  }
+  const number=ctx.measureText(state.number).width > 102 ? ellipsizeLine(state.number,102) : state.number;
+  ctx.fillStyle=state.cream;
+  ctx.letterSpacing='0px';
+  ctx.fillText(number,974,106);
+  ctx.textAlign='left';
+  ctx.textBaseline='alphabetic';
+}
+
+function drawCharacter(){
+  if(!character) return;
+  const base = Math.max(1080/character.width,1512/character.height);
+  const s = base * state.charScale/100;
+  const w = character.width*s;
+  const h = character.height*s;
+  const x = (1080-w)/2 + state.charX*10;
+  const y = (1512-h)/2 + state.charY*10;
+  ctx.save();
+  ctx.shadowColor='rgba(0,0,0,.42)';
+  ctx.shadowBlur=24;
+  ctx.shadowOffsetY=12;
+  ctx.drawImage(character,x,y,w,h);
+  ctx.restore();
+}
+
+  function traceStar(points,radius,innerRadius){
+    ctx.beginPath();
+    for(let point=0;point<points*2;point++){
+      const angle=-Math.PI/2+point*Math.PI/points;
+      const size=point%2===0?radius:innerRadius;
+      const x=Math.cos(angle)*size;
+      const y=Math.sin(angle)*size;
+      if(point===0) ctx.moveTo(x,y);
+      else ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+  }
+
+  function drawRarityEmblem(rarity,style){
+    const gradient=rarityGradient(-24,24,style);
+    ctx.fillStyle=gradient;
+    ctx.strokeStyle=style.light;
+    ctx.lineWidth=1.5;
+
+    if(rarity==='COMMUN'){
+      ctx.beginPath();
+      ctx.arc(0,0,14,0,Math.PI*2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(0,0,3,0,Math.PI*2);
+      ctx.fillStyle=style.light;
+      ctx.fill();
+      return;
+    }
+
+    if(rarity==='RARE'){
+      ctx.beginPath();
+      ctx.moveTo(0,-20); ctx.lineTo(17,0); ctx.lineTo(0,20); ctx.lineTo(-17,0);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(0,-9); ctx.lineTo(8,0); ctx.lineTo(0,9); ctx.lineTo(-8,0);
+      ctx.closePath();
+      ctx.stroke();
+      return;
+    }
+
+    if(rarity==='ÉPIQUE'){
+      ctx.beginPath();
+      ctx.moveTo(-23,10);
+      ctx.lineTo(-18,-10);
+      ctx.lineTo(-7,1);
+      ctx.lineTo(0,-19);
+      ctx.lineTo(7,1);
+      ctx.lineTo(18,-10);
+      ctx.lineTo(23,10);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(-22,14);
+      ctx.lineTo(22,14);
+      ctx.lineTo(18,20);
+      ctx.lineTo(-18,20);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle=style.light;
+      for(const point of [-18,0,18]){
+        ctx.beginPath();
+        ctx.arc(point,point===0?-19:-10,2,0,Math.PI*2);
+        ctx.fill();
+      }
+      return;
+    }
+
+    if(rarity==='PRISMATIQUE'){
+      traceStar(8,23,12);
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(0,-7); ctx.lineTo(7,0); ctx.lineTo(0,7); ctx.lineTo(-7,0);
+      ctx.closePath();
+      ctx.fillStyle='#f3ffff';
+      ctx.fill();
+      return;
+    }
+
+    traceStar(5,23,10);
+    ctx.fill();
+    ctx.stroke();
+  }
+
+  function drawLowerPanel(){
+  const rarityStyle=getRarityStyle();
+  // rarity ribbon
+  const ribbonGradient=rarityRibbonGradient(rarityStyle);
+  const ribbonFill=rarityStyle.holographic?ribbonGradient:'#101114ee';
+  roundRect(90,1000,900,86,24,ribbonFill,ribbonGradient,1.6);
+  if(rarityStyle.holographic){
+    ctx.save();
+    ctx.beginPath();
+    ctx.roundRect(90,1000,900,86,24);
+    ctx.clip();
+    ctx.fillStyle='rgba(8,7,18,.48)';
+    ctx.fillRect(90,1000,900,86);
+    ctx.restore();
+    drawPrismaticFoil(90,1000,900,86,24);
+    ctx.save();
+    ctx.beginPath();
+    ctx.roundRect(90,1000,900,86,24);
+    ctx.clip();
+    ctx.fillStyle=rarityRibbonGradient(rarityStyle);
+    ctx.fillRect(90,1000,900,4);
+    ctx.restore();
+  }
+
+  ctx.fillStyle=rarityStyle.text;
+  let raritySize=34;
+  ctx.font=`900 ${raritySize}px Georgia, serif`;
+  while(ctx.measureText(state.rarity.toUpperCase()).width > 750 && raritySize > 20){
+    raritySize--;
+    ctx.font=`900 ${raritySize}px Georgia, serif`;
+  }
+  let rarity=state.rarity.toUpperCase();
+  if(ctx.measureText(rarity).width > 750) rarity=ellipsizeLine(rarity,750);
+  ctx.textBaseline='middle';
+  ctx.fillText(rarity,128,1043);
+
+  // Rarity symbol
+  ctx.save();
+  ctx.translate(950,1043);
+  ctx.shadowColor='#0009'; ctx.shadowBlur=14;
+  drawRarityEmblem(state.rarity,rarityStyle);
+  ctx.restore();
+
+  // text box
+  roundRect(90,1108,900,307,26,'#fffefa',rarityGradient(1108,1415,rarityStyle),1.3);
+
+  let mainSize=37;
+  let subSize=28;
+  let mainFont=`700 ${mainSize}px Georgia, serif`;
+  let subFont=`italic ${subSize}px Georgia, serif`;
+  let mainLines=wrap(state.mainText,780,mainFont);
+  let subLines=wrap(state.subText,780,subFont);
+  const textHeight=230;
+  const dividerGap=52;
+  const totalHeight=()=>mainLines.length*mainSize*1.22 + dividerGap + subLines.length*subSize*1.3;
+  while(totalHeight() > textHeight && subSize > 18){
+    subSize--;
+    subFont=`italic ${subSize}px Georgia, serif`;
+    subLines=wrap(state.subText,780,subFont);
+  }
+  while(totalHeight() > textHeight && mainSize > 24){
+    mainSize--;
+    mainFont=`700 ${mainSize}px Georgia, serif`;
+    mainLines=wrap(state.mainText,780,mainFont);
+  }
+  const mainLineHeight=mainSize*1.22;
+  const subLineHeight=subSize*1.3;
+  const maxMainLines=Math.max(1,Math.floor((textHeight-dividerGap-subLineHeight)/mainLineHeight));
+  mainLines=fitLines(mainLines,maxMainLines,780);
+  const maxSubLines=Math.max(1,Math.floor((textHeight-dividerGap-mainLines.length*mainLineHeight)/subLineHeight));
+  subLines=fitLines(subLines,maxSubLines,780);
+  ctx.fillStyle='#171513';
+  ctx.font=mainFont;
+  ctx.textBaseline='top';
+  const usedHeight=mainLines.length*mainLineHeight + dividerGap + subLines.length*subLineHeight;
+  let y=1108+(307-usedHeight)/2;
+  for(const line of mainLines){ ctx.fillText(line,150,y); y+=mainLineHeight; }
+
+  ctx.strokeStyle=colorWithAlpha(rarityStyle.deep,.6);
+  ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.moveTo(150,y+18); ctx.lineTo(930,y+18); ctx.stroke();
+
+  ctx.font=subFont;
+  ctx.fillStyle='#211d16';
+  y += 52;
+  for(const line of subLines){ctx.fillText(line,150,y); y+=subLineHeight;}
+}
+
+function draw(){
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.setTransform(canvas.width/1080,0,0,canvas.height/1512,0,0);
+  const rarityStyle=getRarityStyle();
+  ctx.save();
+  ctx.beginPath();
+  ctx.roundRect(0,0,1080,1512,42);
+  ctx.clip();
+
+  // Card background
+  ctx.save();
+  if(background) fitCover(background,0,0,1080,1512);
+  else {
+    const bg = ctx.createLinearGradient(0,0,0,1512);
+    bg.addColorStop(0,state.dark);
+    bg.addColorStop(.52,'#100d08');
+    bg.addColorStop(1,'#050403');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,1080,1512);
+
+    const goldWash=ctx.createLinearGradient(0,0,1080,1512);
+    goldWash.addColorStop(0,colorWithAlpha(rarityStyle.main,.16));
+    goldWash.addColorStop(.48,'rgba(255,254,250,0)');
+    goldWash.addColorStop(1,colorWithAlpha(rarityStyle.deep,.18));
+    ctx.fillStyle=goldWash; ctx.fillRect(0,0,1080,1512);
+      const glows=[
+        {x:108,y:60,radius:690,color:rarityStyle.main,alpha:.2},
+        {x:970,y:1440,radius:760,color:rarityStyle.light,alpha:.26},
+        {x:590,y:760,radius:520,color:rarityStyle.deep,alpha:.16}
+      ];
+      for(const glow of glows){
+        const gradient=ctx.createRadialGradient(glow.x,glow.y,0,glow.x,glow.y,glow.radius);
+        gradient.addColorStop(0,colorWithAlpha(glow.color,glow.alpha));
+        gradient.addColorStop(.35,colorWithAlpha(glow.color,glow.alpha*.5));
+        gradient.addColorStop(.7,colorWithAlpha(glow.color,glow.alpha*.15));
+        gradient.addColorStop(1,colorWithAlpha(glow.color,0));
+        ctx.fillStyle=gradient;
+        ctx.fillRect(0,0,1080,1512);
+      }
+      for(const bokeh of siteBokeh){
+        const alpha=bokeh.alpha*.24;
+        const gradient=ctx.createRadialGradient(bokeh.x,bokeh.y,0,bokeh.x,bokeh.y,bokeh.radius);
+        gradient.addColorStop(0,colorWithAlpha(rarityStyle.light,alpha*.7));
+        gradient.addColorStop(.55,colorWithAlpha(rarityStyle.main,alpha*.45));
+        gradient.addColorStop(.85,colorWithAlpha(rarityStyle.deep,alpha*.2));
+        gradient.addColorStop(1,colorWithAlpha(rarityStyle.deep,0));
+        ctx.fillStyle=gradient;
+        ctx.beginPath();
+        ctx.arc(bokeh.x,bokeh.y,bokeh.radius,0,Math.PI*2);
+        ctx.fill();
+      }
+  }
+  ctx.restore();
+
+  ctx.save();
+  ctx.globalCompositeOperation='screen';
+  ctx.globalAlpha=1;
+  ctx.fillStyle=grainPattern;
+  ctx.fillRect(0,0,1080,1512);
+  ctx.restore();
+
+  if(!background){
+    for(const speck of siteDust){
+      ctx.fillStyle=colorWithAlpha(rarityStyle.main,speck.alpha);
+      ctx.beginPath();
+      ctx.arc(speck.x,speck.y,speck.radius,0,Math.PI*2);
+      ctx.fill();
+    }
+  }
+
+  // dark overlay to make gold/type readable
+  if(background){
+    const ov=ctx.createLinearGradient(0,0,0,1250);
+    ov.addColorStop(0,'rgba(0,0,0,.15)');
+    ov.addColorStop(.65,'rgba(0,0,0,.12)');
+    ov.addColorStop(1,'rgba(0,0,0,.55)');
+    ctx.fillStyle=ov; ctx.fillRect(0,0,1080,1512);
+  }
+
+  const atmosphere=ctx.createRadialGradient(540,600,40,540,600,760);
+  atmosphere.addColorStop(0,colorWithAlpha(rarityStyle.main,.05));
+  atmosphere.addColorStop(.58,colorWithAlpha(rarityStyle.deep,.02));
+  atmosphere.addColorStop(1,colorWithAlpha(rarityStyle.deep,.07));
+  ctx.fillStyle=atmosphere; ctx.fillRect(0,0,1080,1512);
+
+  // The title sits behind the render; the number badge stays in front.
+  drawHeader();
+  drawCharacter();
+  drawHeaderBadge();
+  drawLowerPanel();
+  drawGoldBorder();
+
+  ctx.strokeStyle=colorWithAlpha(rarityStyle.main,.58);
+  ctx.lineWidth=1;
+  ctx.beginPath();
+  ctx.moveTo(310,1458); ctx.lineTo(420,1458);
+  ctx.moveTo(660,1458); ctx.lineTo(770,1458);
+  ctx.stroke();
+  ctx.fillStyle='rgba(247,239,220,.9)';
+  ctx.font='700 15px Georgia, serif';
+  ctx.letterSpacing='2px';
+  ctx.textAlign='center';
+  ctx.fillText('ONE PRODIGE CARD',540,1458);
+  ctx.textAlign='left';
+  ctx.letterSpacing='0px';
+  ctx.restore();
+}
+
+function downloadPNG(){
+  const a=document.createElement('a');
+  a.download=`${(state.name||'gold-card').replace(/[^a-z0-9_-]+/gi,'-')}.png`;
+  a.href=canvas.toDataURL('image/png');
+  a.click();
+}
+
+bind();
+draw();
+</script>
+</body>
+</html>
